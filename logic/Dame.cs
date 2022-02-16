@@ -1,32 +1,34 @@
 namespace cs_games.dame
 {
-    public class Dame : IGame
+    public class Dame : Game
     {
         private GameField<Dame> _field;
+        public GameField<Dame> Field
+        {
+            get => _field;
+        }
+
+        public override string Name { get => "Dame"; }
+        public override int Width { get => _field.Width; }
+        public override int Height { get => _field.Height; }
 
         public Dame() { _field = new GameField<Dame>(); }
 
         public Dame(GameField<Dame> field)
         {
             _field = field;
-            Init();
         }
 
-        public void Init()
+        public override void Init()
         {
-            // TODO better init
             for (int i = 0; i < 8; i += 2)
             {
-                new DameFigure(_field, 0, i, false);
-                new DameFigure(_field, 1, i + 1, false);
-                new DameFigure(_field, 2, i, false);
-                new DameFigure(_field, 5, i + 1, true);
-                new DameFigure(_field, 6, i, true);
-                new DameFigure(_field, 7, i + 1, true);
+                foreach (int j in new int[] { 0, 1, 2, 5, 6, 7 })
+                    new DameFigure(_field, j, i + ((j % 2 == 1) ? 1 : 0), j > 2);
             }
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return _field.ToString();
         }
@@ -41,7 +43,7 @@ namespace cs_games.dame
             return (_player1) ? 'x' : 'o';
         }
 
-        public override void MoveTo()
+        public override void MoveTo(int x, int y)
         {
             throw new NotImplementedException();
         }

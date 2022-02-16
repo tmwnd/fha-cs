@@ -1,21 +1,33 @@
-﻿namespace cs_games.Chess
+﻿namespace cs_games.chess
 {
-    internal class Chess : IGame
+    internal class Chess : Game
     {
         private GameField<Chess> _field;
+        public GameField<Chess> Field
+        {
+            get => _field;
+        }
+
+        public override string Name { get => "Chess"; }
+        public override int Width { get => _field.Width; }
+        public override int Height { get => _field.Height; }
+
+        public Chess()
+        {
+            _field = new GameField<Chess>();
+        }
 
         public Chess(GameField<Chess> field)
         {
             _field = field;
-            Init();
         }
 
-        void IGame.Init()
+        public override void Init()
         {
             throw new NotImplementedException();
         }
 
-        string IGame.ToString()
+        public override string ToString()
         {
             throw new NotImplementedException();
         }
@@ -138,8 +150,8 @@
 
     internal class Pawn : GameFigure<Chess>
     {
-        private static GameField<Chess> _lastField;
-        private static GameField<Chess> LastField { get; set; }
+        private static GameField<Chess>? _lastField;
+        private static GameField<Chess>? LastField { get; set; }
         public Pawn(GameField<Chess> field, int x, int y, bool player1) : base(field, x, y, player1) { }
 
         public override void MoveTo(int x, int y)
@@ -162,7 +174,7 @@
             }
             else if ((y == Y + 1 && Math.Abs(X - x) == 1 && Player1) || (y == Y - 1 && Math.Abs(X - x) == 1 && !Player1))
             {
-                if ((Field[x, Y] is Pawn) && (LastField[x, Y - 2 * Math.Sign(y - Y)] == Field[x, Y]))
+                if ((Field[x, Y] is Pawn) && (LastField?[x, Y - 2 * Math.Sign(y - Y)] == Field[x, Y]))
                 {
                     Field[x, Y] = null;
                     X = x;

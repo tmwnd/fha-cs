@@ -1,8 +1,13 @@
-namespace CS_Games.Dame
+namespace cs_games.dame
 {
     public class Dame : IGame
     {
+        private static string _name = "Dame";
+        public static string getName() => "Dame";
+
         private GameField<Dame> _field;
+
+        public Dame() { _field = new GameField<Dame>(); }
 
         public Dame(GameField<Dame> field)
         {

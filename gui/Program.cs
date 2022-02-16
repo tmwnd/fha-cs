@@ -1,4 +1,4 @@
-namespace fha_cs
+namespace cs_games
 {
     internal static class Program
     {

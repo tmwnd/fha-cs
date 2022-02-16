@@ -1,3 +1,10 @@
-.vscode/
-bin/
-obj/
+# logic
+logic/.vscode/
+logic/bin/
+logic/obj/
+
+# gui
+gui/.vs/
+gui/bin/
+gui/obj/
+gui/*.user

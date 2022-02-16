@@ -6,7 +6,6 @@ namespace cs_games
     public interface IGame
     {
         public static List<Type> games = new List<Type> { new Dame().GetType() };
-        public static string getName() => "IGame";
 
         public void Init();
         public String ToString();

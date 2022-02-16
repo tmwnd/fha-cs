@@ -1,4 +1,4 @@
-﻿namespace CS_Games.Chess
+﻿namespace cs_games.Chess
 {
     internal class Chess : IGame
     {

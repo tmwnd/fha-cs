@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CS_Games
+namespace cs_games
 {
     internal class IllegalMoveException : Exception
     {

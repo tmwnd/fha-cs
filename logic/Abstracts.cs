@@ -51,7 +51,7 @@ namespace cs_games
             {
                 if (!IndexIsValid(x, y))
                     throw new ArgumentException($"Es ist nicht möglich in einem {_field.GetLength(0)}x{_field.GetLength(1)} Feld mit den Index {x},{y} zuzugreifen.");
-                if (_field[x, y] != null)
+                if (value != null && _field[x, y] != null)
                     throw new ArgumentException($"Das Feld mit den Index {x},{y} ist bereits durch {_field[x, y]} belegt");
                 _field[x, y] = value;
             }
@@ -89,6 +89,10 @@ namespace cs_games
     public abstract class GameFigure<Game>
     where Game : IGame
     {
+        protected int _x, _y;
+        public int X {get; set;}
+        public int Y {get; set;}
+
         protected bool _player1;
         public bool Player1 { get; set; }
 
@@ -112,7 +116,7 @@ namespace cs_games
         }
 
         // abstract area
-        public abstract void MoveTo();
+        public abstract void MoveTo(int x, int y);
         public abstract char ToChar();
     }
 }

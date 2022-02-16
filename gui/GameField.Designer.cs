@@ -1,4 +1,4 @@
-﻿namespace fha_cs
+﻿namespace cs_games
 {
     partial class Spiel
     {
@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.GameField = new System.Windows.Forms.GroupBox();
+            this.gameField = new System.Windows.Forms.GroupBox();
             this.ButtonStartGame = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // GameField
+            // gameField
             // 
-            this.GameField.Location = new System.Drawing.Point(15, 15);
-            this.GameField.Name = "GameField";
-            this.GameField.Size = new System.Drawing.Size(550, 350);
-            this.GameField.TabIndex = 0;
-            this.GameField.TabStop = false;
-            this.GameField.Text = "Spielfeld";
-            this.GameField.Enter += new System.EventHandler(this.groupBox1_Enter);
+            this.gameField.Location = new System.Drawing.Point(15, 15);
+            this.gameField.Name = "gameField";
+            this.gameField.Size = new System.Drawing.Size(550, 350);
+            this.gameField.TabIndex = 0;
+            this.gameField.TabStop = false;
+            this.gameField.Text = "Spielfeld";
+            this.gameField.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // ButtonStartGame
             // 
@@ -58,7 +58,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.ButtonStartGame);
-            this.Controls.Add(this.GameField);
+            this.Controls.Add(this.gameField);
             this.Name = "Spiel";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
@@ -67,7 +67,7 @@
 
         #endregion
 
-        private GroupBox GameField;
+        private GroupBox gameField;
         private Button ButtonStartGame;
     }
 }

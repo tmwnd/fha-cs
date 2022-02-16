@@ -1,4 +1,4 @@
-﻿namespace gui
+﻿namespace cs_games
 {
     partial class Games
     {
@@ -28,48 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.GroupBoxGames = new System.Windows.Forms.GroupBox();
+            this.groupBoxGames = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // textBox1
+            // groupBoxGames
             // 
-            this.textBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-            this.textBox1.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.textBox1.Location = new System.Drawing.Point(25, 15);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(250, 50);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Bitte wählen Sie das gewünschte Spiel aus der folgenden Liste aus";
+            this.groupBoxGames.Location = new System.Drawing.Point(25, 75);
+            this.groupBoxGames.Name = "groupBoxGames";
+            this.groupBoxGames.Size = new System.Drawing.Size(250, 300);
+            this.groupBoxGames.TabIndex = 1;
+            this.groupBoxGames.TabStop = false;
+            this.groupBoxGames.Text = "Games";
             // 
-            // GroupBoxGames
+            // label1
             // 
-            this.GroupBoxGames.Location = new System.Drawing.Point(25, 75);
-            this.GroupBoxGames.Name = "GroupBoxGames";
-            this.GroupBoxGames.Size = new System.Drawing.Size(250, 300);
-            this.GroupBoxGames.TabIndex = 1;
-            this.GroupBoxGames.TabStop = false;
-            this.GroupBoxGames.Text = "Games";
+            this.label1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.label1.Location = new System.Drawing.Point(25, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(250, 50);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Bitte wählen Sie das gewünschte Spiel aus\r\nder folgenden Liste aus:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // Games
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 461);
-            this.Controls.Add(this.GroupBoxGames);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.groupBoxGames);
             this.Name = "Games";
             this.Text = "Form2";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private TextBox textBox1;
-        private GroupBox GroupBoxGames;
+        private GroupBox groupBoxGames;
+        private Label label1;
     }
 }

@@ -1,4 +1,4 @@
-namespace fha_cs
+namespace cs_games
 {
     public partial class Spiel : Form
     {
@@ -21,7 +21,8 @@ namespace fha_cs
         {
             //GameField.Controls.Add(new Button());
 
-            new gui.Games().ShowDialog();
+            Games games = new Games();
+            games.ShowDialog();
         }
     }
 }

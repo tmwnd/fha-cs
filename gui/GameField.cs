@@ -16,5 +16,12 @@ namespace fha_cs
         {
 
         }
+
+        private void ButtonStartGameClick(object sender, EventArgs e)
+        {
+            //GameField.Controls.Add(new Button());
+
+            new gui.Games().ShowDialog();
+        }
     }
 }

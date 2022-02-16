@@ -1,4 +1,4 @@
-namespace CS_Games
+namespace CS_Games.Dame
 {
     public class Dame : IGame
     {

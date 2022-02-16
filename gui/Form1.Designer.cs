@@ -1,6 +1,6 @@
 ﻿namespace fha_cs
 {
-    partial class Form1
+    partial class Spiel
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,35 +29,50 @@
         private void InitializeComponent()
         {
             this.GameField = new System.Windows.Forms.GroupBox();
+            this.DynamicGameField = new System.Windows.Forms.DataGridView();
+            this.GameField.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DynamicGameField)).BeginInit();
             this.SuspendLayout();
             // 
             // GameField
             // 
-            this.GameField.AutoSize = true;
-            this.GameField.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.GameField.Controls.Add(this.DynamicGameField);
             this.GameField.Location = new System.Drawing.Point(15, 15);
             this.GameField.Name = "GameField";
-            this.GameField.Size = new System.Drawing.Size(6, 5);
+            this.GameField.Size = new System.Drawing.Size(550, 350);
             this.GameField.TabIndex = 0;
             this.GameField.TabStop = false;
             this.GameField.Text = "Spielfeld";
             this.GameField.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // Form1
+            // DynamicGameField
+            // 
+            this.DynamicGameField.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.DynamicGameField.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DynamicGameField.Location = new System.Drawing.Point(25, 25);
+            this.DynamicGameField.Name = "DynamicGameField";
+            this.DynamicGameField.RowTemplate.Height = 25;
+            this.DynamicGameField.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.DynamicGameField.Size = new System.Drawing.Size(500, 300);
+            this.DynamicGameField.TabIndex = 1;
+            // 
+            // Spiel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.GameField);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Spiel";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.GameField.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DynamicGameField)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private GroupBox GameField;
+        private DataGridView DynamicGameField;
     }
 }

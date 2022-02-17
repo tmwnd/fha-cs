@@ -3,14 +3,15 @@ namespace cs_games.data_objects
     public class GameButton<G> : Button
     where G : Game
     {
-        // TODO dynamic size
+        public static G? _game;
         public static GameField<G> _field = new GameField<G>();
         public static GameButton<G>[,] gameButtons = new GameButton<G>[0, 0];
 
-        public static void Create(GameField<G> field)
+        public static void Create(GameField<G> field, G game)
         {
             _field = field;
             gameButtons = new GameButton<G>[field.Height, field.Width];
+            _game = game;
         }
 
         public static void InitAll()
@@ -47,19 +48,26 @@ namespace cs_games.data_objects
 
         public void Init()
         {
-            try { Click -= StartMove; } catch { }
-            try { Click -= DoMove; } catch { }
+            try { Click -= StartMoveClick; } catch { }
+            try { Click -= DoMoveClick; } catch { }
 
             if (_field[X, Y] != null)
             {
                 if (_field[X, Y]?.CanMove() ?? false)
                 {
                     Enabled = true;
-                    Click += StartMove;
+                    Click += StartMoveClick;
                 }
 
-                BackgroundImage = Image.FromFile(_field[X, Y]?.IMG ?? Game.GetIMGPath(""));
-                BackgroundImageLayout = ImageLayout.Stretch;
+                if (_field[X, Y]?.IMG != null)
+                {
+                    BackgroundImage = Image.FromFile(_field[X, Y]?.IMG ?? Game.GetIMGPath(""));
+                    BackgroundImageLayout = ImageLayout.Stretch;
+                }
+                else
+                {
+                    BackgroundImage = null;
+                }
             }
             else
             {
@@ -68,24 +76,30 @@ namespace cs_games.data_objects
             }
         }
 
-        public void StartMove(Object? sender, EventArgs e)
+        public void StartMoveClick(Object? sender, EventArgs e)
         {
             if (_field[X, Y] == null)
                 return;
 
-            for (int i = 0; i < _field.Height; i++)
-                for (int j = 0; j < _field.Width; j++)
+            for (int i = 0; i < _field.Width; i++)
+                for (int j = 0; j < _field.Height; j++)
                     GameButton<G>.gameButtons[i, j].Enabled = false;
 
             foreach (int[] move in _field[X, Y]?.GetMoves() ?? new List<int[]>())
             {
                 GameButton<G> button = GameButton<G>.gameButtons[move[0], move[1]];
                 button.Enabled = true;
-                button.Click += DoMove;
+                button.Click += DoMoveClick;
+
+                if (button.X == X && button.Y == Y)
+                {
+                    button.Click -= StartMoveClick;
+                    button.PerformClick();
+                }
             }
         }
 
-        public void DoMove(Object? sender, EventArgs e)
+        public void DoMoveClick(Object? sender, EventArgs e)
         {
             if (sender == null)
                 return;
@@ -94,6 +108,13 @@ namespace cs_games.data_objects
             _field[X, Y]?.MoveTo(button.X, button.Y);
 
             GameButton<G>.InitAll();
+
+            if (_game?.CheckIfWin(out bool winner) ?? false) {
+                System.Diagnostics.Debug.WriteLine($"Spieler {((winner) ? "1": "2")} hat gewonnen");
+                for (int i = 0; i < _field.Width; i++)
+                    for (int j = 0; j < _field.Height; j++)
+                        GameButton<G>.gameButtons[i, j].Enabled = false;
+            }
         }
     }
 }

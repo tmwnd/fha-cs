@@ -41,6 +41,7 @@ namespace cs_games
         }
 
         public abstract void Init();
+        public abstract bool CheckIfWin(out bool winner);
         public override abstract string ToString();
     }
 
@@ -54,11 +55,11 @@ namespace cs_games
             set => _field = value;
         }
 
-        public int Width
+        public int Height
         {
             get { return _field.GetLength(0); }
         }
-        public int Height
+        public int Width
         {
             get { return _field.GetLength(1); }
         }
@@ -83,13 +84,13 @@ namespace cs_games
             get
             {
                 if (!IndexIsValid(x, y))
-                    throw new ArgumentException($"Es ist nicht möglich in einem {Width}x{Height} Feld auf den Index {x},{y} zuzugreifen.");
+                    throw new ArgumentException($"Es ist nicht möglich in einem {Height}x{Width} Feld auf den Index {x},{y} zuzugreifen.");
                 return _field[x, y];
             }
             set
             {
                 if (!IndexIsValid(x, y))
-                    throw new ArgumentException($"Es ist nicht möglich in einem {Width}x{Height} Feld mit den Index {x},{y} zuzugreifen.");
+                    throw new ArgumentException($"Es ist nicht möglich in einem {Height}x{Width} Feld mit den Index {x},{y} zuzugreifen.");
                 if (value != null && _field[x, y] != null)
                     throw new ArgumentException($"Das Feld mit den Index {x},{y} ist bereits durch {_field[x, y]} belegt");
                 _field[x, y] = value;
@@ -98,7 +99,7 @@ namespace cs_games
 
         public bool IndexIsValid(int x, int y)
         {
-            return !(x >= Width || y >= Height);
+            return !(x >= Height || y >= Width);
         }
 
         public void Swap(int x1, int y1, int x2, int y2)
@@ -117,11 +118,11 @@ namespace cs_games
             hline += "\n";
 
             string ret = hline;
-            for (int i = 0; i < Width; i++)
+            for (int i = 0; i < Height; i++)
             {
                 ret += "| ";
                 string div = "";
-                for (int j = 0; j < Height; j++)
+                for (int j = 0; j < Width; j++)
                 {
                     ret += div + (this[i, j]?.ToChar().ToString() ?? " ");
                     div = " | ";

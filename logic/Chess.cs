@@ -26,7 +26,13 @@ namespace cs_games.chess
 
         public override void Init()
         {
-            // throw new NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public override bool CheckIfWin(out bool winner)
+        {
+            winner = false;
+            return false;
         }
 
         public override string ToString()
@@ -216,7 +222,7 @@ namespace cs_games.chess
 
         public override void MoveTo(int x, int y)
         {
-            if (Math.Abs(X - x) <= 1 && Math.Abs(Y - y)<=1)
+            if (Math.Abs(X - x) <= 1 && Math.Abs(Y - y) <= 1)
             {
                 if (Field[x, y]?.Player1 == Player1)
                     throw new IllegalMoveException("Man kann seine eigene Figur nicht Schlagen");

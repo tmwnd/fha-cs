@@ -24,9 +24,15 @@ namespace cs_games.vier_gewinnt
 
         public override void Init() { }
 
+        public override bool CheckIfWin(out bool winner)
+        {
+            winner = false;
+            return false;
+        }
+
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return _field.ToString();
         }
     }
 }

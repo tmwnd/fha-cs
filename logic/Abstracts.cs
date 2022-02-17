@@ -9,7 +9,8 @@ namespace cs_games
 {
     public abstract class Game
     {
-        public static JsonElement config = JsonDocument.Parse(File.OpenText($"{Directory.GetCurrentDirectory()}/../../../../config.json").ReadToEnd()).RootElement;
+        private static string configPath = File.OpenText($"{Directory.GetCurrentDirectory()}/../../../../config.json").ReadToEnd();
+        public static JsonElement config = JsonDocument.Parse(configPath.Substring(0, configPath.LastIndexOf('}'))+ $", \"root_path\":\"{Directory.GetCurrentDirectory().Replace("\\", "/")}/../../../../\"}}").RootElement;
         public static List<Game> Games
         {
             get => new List<Game> { new Dame(), new Chess(), new TicTacToe(), new VierGewinnt() };
@@ -17,7 +18,6 @@ namespace cs_games
 
         public static string GetIMGPath(string game)
         {
-            config = JsonDocument.Parse(config.GetRawText().Replace("}", "") + $", \"root_path\":{Directory.GetCurrentDirectory()}/../../../../").RootElement;
             try
             {
                 string ret = config.GetProperty("root_path").ToString() + config.GetProperty("games").GetProperty("folder").ToString() + game.ToLower() + ".png";
@@ -29,6 +29,17 @@ namespace cs_games
             {
                 return config.GetProperty("root_path").ToString() + config.GetProperty("games").GetProperty("folder").ToString() + config.GetProperty("games").GetProperty("default").ToString();
             }
+        }
+
+        private static string ReplaceLastOccurrence(string Source, string Find, string Replace)
+        {
+            int place = Source.LastIndexOf(Find);
+
+            if (place == -1)
+                return Source;
+
+            string result = Source.Remove(place, Find.Length).Insert(place, Replace);
+            return result;
         }
 
         public abstract string Name { get; }

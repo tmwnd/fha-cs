@@ -28,12 +28,12 @@
                 dynamicButton.Location = point;
                 dynamicButton.BackgroundImage = Image.FromFile(Game.GetIMGPath(game.Name));
                 dynamicButton.BackgroundImageLayout = ImageLayout.Stretch;
-                dynamicButton.Click += (object? sender, EventArgs e) =>
+                dynamicButton.Click += new EventHandler((object sender, EventArgs e) =>
                 {
                     if (_game != null)
                         _game.Game = game;
                     Close();
-                };
+                });
 
                 groupBoxGames.Controls.Add(dynamicButton);
             }

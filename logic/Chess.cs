@@ -28,25 +28,25 @@ namespace cs_games.chess
         {
             for (int i = 0; i < 8; i++)
             {
-                Field[i, 1] = new Pawn(Field, i, 1, true);
-                Field[i, 6] = new Pawn(Field, i, 6, false);
+                new Pawn(Field, i, 1, true);
+                new Pawn(Field, i, 6, false);
             }
-            Field[0, 0] = new Rook(Field, 0, 0, true);
-            Field[7, 0] = new Rook(Field, 0, 0, true);
-            Field[0, 7] = new Rook(Field, 0, 0, false);
-            Field[7, 7] = new Rook(Field, 0, 0, false);
-            Field[1, 0] = new Knight(Field, 1, 0, true);
-            Field[6, 0] = new Knight(Field, 6, 0, true);
-            Field[1, 7] = new Knight(Field, 1, 7, true);
-            Field[6, 7] = new Knight(Field, 6, 7, true);
-            Field[2, 0] = new Bishop(Field, 2, 0, true);
-            Field[5, 0] = new Bishop(Field, 5, 0, true);
-            Field[2, 7] = new Bishop(Field, 2, 7, true);
-            Field[5, 7] = new Bishop(Field, 5, 7, true);
-            Field[4, 0] = new Queen(Field, 4, 0, true);
-            Field[4, 7] = new Queen(Field, 4, 7, false);
-            Field[5, 0] = new King(Field, 5, 0, true);
-            Field[5, 7] = new King(Field, 5, 7, false);
+            new Rook(Field, 0, 0, true);
+            new Rook(Field, 7, 0, true);
+            new Rook(Field, 0, 7, false);
+            new Rook(Field, 7, 7, false);
+            new Knight(Field, 1, 0, true);
+            new Knight(Field, 6, 0, true);
+            new Knight(Field, 1, 7, true);
+            new Knight(Field, 6, 7, true);
+            new Bishop(Field, 2, 0, true);
+            new Bishop(Field, 5, 0, true);
+            new Bishop(Field, 2, 7, true);
+            new Bishop(Field, 5, 7, true);
+            new Queen(Field, 3, 0, true);
+            new Queen(Field, 3, 7, false);
+            new King(Field, 4, 0, true);
+            new King(Field, 4, 7, false);
         }
 
         public override string ToString()
@@ -59,7 +59,7 @@ namespace cs_games.chess
     {
         private bool _hasMoved;
         public bool HasMoved { get; set; }
-        public Rook(GameField<Chess> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+        public Rook(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { HasMoved = false; }
 
         public override void MoveTo(int x, int y)
         {
@@ -85,7 +85,7 @@ namespace cs_games.chess
 
         public override List<int[]> GetMoves()
         {
-            List<int[]> result = new List<int[]>();
+            List<int[]> result = new();
             for (int i = X; i < 8; i++)
             {
                 result.Add(new int[] { i, Y });
@@ -121,7 +121,7 @@ namespace cs_games.chess
 
     internal class Knight : GameFigure<Chess>
     {
-        public Knight(GameField<Chess> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+        public Knight(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { }
 
         public override void MoveTo(int x, int y)
         {
@@ -141,7 +141,7 @@ namespace cs_games.chess
 
         public override List<int[]> GetMoves()
         {
-            List<int[]> result = new List<int[]>();
+            List<int[]> result = new();
             for (int i = -2; i < 3; i++)
                 for (int j = -2; j < 3; j++)
                     if (!(Math.Abs(i) == Math.Abs(j)) && i != 0 && j != 0 && 0 <= X + i && 0 <= Y + j && 8 > X + i && 8 > Y + j)
@@ -157,7 +157,7 @@ namespace cs_games.chess
 
     internal class Bishop : GameFigure<Chess>
     {
-        public Bishop(GameField<Chess> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+        public Bishop(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { }
 
         public override void MoveTo(int x, int y)
         {
@@ -182,7 +182,7 @@ namespace cs_games.chess
 
         public override List<int[]> GetMoves()
         {
-            List<int[]> result = new List<int[]>();
+            List<int[]> result = new();
             for (int i = X, j = Y; i < 8 && j < 8; i++, j++)
             {
                 result.Add(new int[] { i, j });
@@ -218,7 +218,7 @@ namespace cs_games.chess
 
     internal class Queen : GameFigure<Chess>
     {
-        public Queen(GameField<Chess> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+        public Queen(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { }
 
         public override void MoveTo(int x, int y)
         {
@@ -243,7 +243,7 @@ namespace cs_games.chess
 
         public override List<int[]> GetMoves()
         {
-            List<int[]> result = new List<int[]>();
+            List<int[]> result = new();
             #region inLine
             for (int i = X; i < 8; i++)
             {
@@ -309,7 +309,7 @@ namespace cs_games.chess
     {
         private static GameField<Chess>? _lastField;
         private static GameField<Chess>? LastField { get; set; }
-        public Pawn(GameField<Chess> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+        public Pawn(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { }
 
         public override void MoveTo(int x, int y)
         {
@@ -334,7 +334,7 @@ namespace cs_games.chess
 
         public override List<int[]> GetMoves()
         {
-            List<int[]> list = new List<int[]>();
+            List<int[]> list = new();
             if (Field[X, Y + (Player1 ? 1 : -1)] == null)
                 list.Add(new int[] { X, Y + (Player1 ? 1 : -1) });
             if (Field[X + 1, Y + (Player1 ? 1 : -1)] != null)
@@ -356,7 +356,7 @@ namespace cs_games.chess
         private bool _hasMoved;
         public bool HasMoved { get; set; }
 
-        public King(GameField<Chess> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+        public King(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { HasMoved = false; }
 
         public override void MoveTo(int x, int y)
         {
@@ -375,7 +375,7 @@ namespace cs_games.chess
 
         public override List<int[]> GetMoves()
         {
-            List<int[]> ret = new List<int[]>();
+            List<int[]> ret = new();
             for (int i = -1; i < 2; i++)
             {
                 for (int j = -1; j < 2; j++)

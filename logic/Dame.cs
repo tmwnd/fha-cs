@@ -96,8 +96,9 @@ namespace cs_games.dame
 
         public override void MoveTo(int x, int y)
         {
-            Field[x, y] = this;
-            Field[_x, _y] = null;
+            _field.Swap(X, Y, x, y);
+            X = x;
+            Y = y;
         }
 
         public override char ToChar()

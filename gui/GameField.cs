@@ -1,6 +1,6 @@
-using cs_games.data_objects;
-using cs_games.dame;
 using cs_games.chess;
+using cs_games.dame;
+using cs_games.data_objects;
 using cs_games.tic_tac_toe;
 using cs_games.vier_gewinnt;
 
@@ -31,8 +31,6 @@ namespace cs_games
 
         private void ButtonStartGameClick(object sender, EventArgs e)
         {
-            //GameField.Controls.Add(new Button());
-
             FormGames games = new FormGames(this);
             games.ShowDialog();
 
@@ -47,6 +45,24 @@ namespace cs_games
             int dx = (gameField.Size.Width - size * _game.Width) / 2;
             int dy = (gameField.Size.Height - 25 - size * _game.Height) / 2 + 25;
 
+            switch (_game.Name)
+            {
+                case "Dame":
+                    GameButton<Dame>.Create(((Dame)_game).Field);
+                    break;
+                case "Chess":
+                    GameButton<Chess>.Create(((Chess)_game).Field);
+                    break;
+                case "TicTacToe":
+                    GameButton<TicTacToe>.Create(((TicTacToe)_game).Field);
+                    break;
+                case "VierGewinnt":
+                    GameButton<VierGewinnt>.Create(((VierGewinnt)_game).Field);
+                    break;
+                default:
+                    throw new Exception($"Spiel {_game.Name} wurde noch nicht implementert; Gerne auf https://github.com/tmwnd/fha-cs anfragen");
+            }
+
             for (int i = 0; i < _game.Width; i++)
             {
                 for (int j = 0; j < _game.Height; j++)
@@ -56,20 +72,19 @@ namespace cs_games
                     switch (_game.Name)
                     {
                         case "Dame":
-                            dynamicButton = new GameButton<Dame>((_game as Dame)?.Field[i, j], i, j);
+                            dynamicButton = new GameButton<Dame>(i, j);
                             break;
                         case "Chess":
-                            dynamicButton = new GameButton<Chess>((_game as Chess)?.Field[i, j], i, j);
+                            dynamicButton = new GameButton<Chess>(i, j);
                             break;
                         case "TicTacToe":
-                            dynamicButton = new GameButton<TicTacToe>((_game as TicTacToe)?.Field[i, j], i, j);
+                            dynamicButton = new GameButton<TicTacToe>(i, j);
                             break;
                         case "VierGewinnt":
-                            dynamicButton = new GameButton<VierGewinnt>((_game as VierGewinnt)?.Field[i, j], i, j);
+                            dynamicButton = new GameButton<VierGewinnt>(i, j);
                             break;
                         default:
-                            dynamicButton = new Button();
-                            break;
+                            throw new Exception($"Spiel {_game.Name} wurde noch nicht implementert; Gerne auf https://github.com/tmwnd/fha-cs anfragen");
                     }
 
                     dynamicButton.Size = new Size(size - 5, size - 5);

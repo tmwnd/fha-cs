@@ -52,14 +52,14 @@
             this.ButtonStartGame.UseVisualStyleBackColor = true;
             this.ButtonStartGame.Click += new System.EventHandler(this.ButtonStartGameClick);
             // 
-            // Spiel
+            // FormGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.ButtonStartGame);
             this.Controls.Add(this.gameField);
-            this.Name = "Spiel";
+            this.Name = "FormGame";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 

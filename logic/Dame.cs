@@ -55,14 +55,14 @@ namespace cs_games.dame
             if (Player1)
             {
                 // unten
-                if (X < _field.Height - 1 && ((Y < _field.Width - 1 && _field[X - 1, Y + 1] == null) || (Y > 0 && _field[X - 1, Y - 1] == null)))
+                if (X > 0 && ((Y < Field.Width - 1 && Field[X - 1, Y + 1] == null) || (Y > 0 && Field[X - 1, Y - 1] == null)))
                     return true;
                 return false;
             }
             else
             {
                 // oben
-                if (X > 0 && ((Y < _field.Width - 1 && _field[X + 1, Y + 1] == null) || (Y > 0 && _field[X + 1, Y - 1] == null)))
+                if (X < Field.Height - 1 && ((Y < Field.Width - 1 && Field[X + 1, Y + 1] == null) || (Y > 0 && Field[X + 1, Y - 1] == null)))
                     return true;
                 return false;
             }
@@ -70,12 +70,35 @@ namespace cs_games.dame
 
         public override List<int[]> GetMoves()
         {
-            return new List<int[]>();
+            List<int[]> ret = new List<int[]>();
+            if (Player1)
+            {
+                if (X > 0)
+                {
+                    if (Y < Field.Width - 1 && Field[X - 1, Y + 1] == null)
+                        ret.Add(new int[] { X - 1, Y + 1 });
+                    if (Y > 0 && Field[X - 1, Y - 1] == null)
+                        ret.Add(new int[] { X - 1, Y - 1 });
+                }
+            }
+            else
+            {
+                if (X < _field.Height - 1)
+                {
+                    if (Y < Field.Width - 1 && Field[X + 1, Y + 1] == null)
+                        ret.Add(new int[] { X + 1, Y + 1 });
+                    if (Y > 0 && Field[X + 1, Y - 1] == null)
+                        ret.Add(new int[] { X + 1, Y - 1 });
+                }
+            }
+            return ret;
         }
 
         public override void MoveTo(int x, int y)
         {
-            throw new NotImplementedException();
+            _field.Swap(X, Y, x, y);
+            X = x;
+            Y = y;
         }
 
         public override char ToChar()

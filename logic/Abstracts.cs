@@ -101,6 +101,13 @@ namespace cs_games
             return !(x >= Width || y >= Height);
         }
 
+        public void Swap(int x1, int y1, int x2, int y2)
+        {
+            GameFigure<G>? temp = _field[x1, y1];
+            _field[x1, y1] = _field[x2, y2];
+            _field[x2, y2] = temp;
+        }
+
         public override String ToString()
         {
             // hline
@@ -180,7 +187,7 @@ namespace cs_games
         }
         public virtual List<int[]> GetMoves()
         {
-            return new List<int[]>();
+            return new List<int[]> { };
         }
 
         public abstract void MoveTo(int x, int y);

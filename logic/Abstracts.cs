@@ -180,7 +180,7 @@ namespace cs_games
         }
         public virtual List<int[]> GetMoves()
         {
-            return new List<int[]>();
+            return new List<int[]> { };
         }
 
         public abstract void MoveTo(int x, int y);

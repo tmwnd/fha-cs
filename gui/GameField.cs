@@ -1,6 +1,8 @@
 using cs_games.data_objects;
 using cs_games.dame;
 using cs_games.chess;
+using cs_games.tic_tac_toe;
+using cs_games.vier_gewinnt;
 
 namespace cs_games
 {
@@ -49,24 +51,38 @@ namespace cs_games
             {
                 for (int j = 0; j < _game.Height; j++)
                 {
-                    Button dynamicButton = new Button();
-                    dynamicButton.Size = new Size(size - 5, size - 5);
-                    dynamicButton.Location = new Point(dx + j * size, dy + i * size);
-                    dynamicButton.Enabled = false;
 
+                    Button dynamicButton;
                     switch (_game.Name)
                     {
                         case "Dame":
-                            new GameButton<Dame>(dynamicButton, (_game as Dame).Field[i, j]);
+                            dynamicButton = new GameButton<Dame>((_game as Dame)?.Field[i, j], i, j);
                             break;
                         case "Chess":
-                            new GameButton<Chess>(dynamicButton, (_game as Chess).Field[i, j]);
+                            dynamicButton = new GameButton<Chess>((_game as Chess)?.Field[i, j], i, j);
+                            break;
+                        case "TicTacToe":
+                            dynamicButton = new GameButton<TicTacToe>((_game as TicTacToe)?.Field[i, j], i, j);
+                            break;
+                        case "VierGewinnt":
+                            dynamicButton = new GameButton<VierGewinnt>((_game as VierGewinnt)?.Field[i, j], i, j);
+                            break;
+                        default:
+                            dynamicButton = new Button();
                             break;
                     }
+
+                    dynamicButton.Size = new Size(size - 5, size - 5);
+                    dynamicButton.Location = new Point(dx + j * size, dy + i * size);
 
                     gameField.Controls.Add(dynamicButton);
                 }
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

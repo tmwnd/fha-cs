@@ -1,35 +1,34 @@
 namespace cs_games.dame
 {
-    public class Dame : IGame
+    public class Dame : Game
     {
-        private static string _name = "Dame";
-        public static string getName() => "Dame";
-
         private GameField<Dame> _field;
+        public GameField<Dame> Field
+        {
+            get => _field;
+        }
+
+        public override string Name { get => "Dame"; }
+        public override int Width { get => _field.Width; }
+        public override int Height { get => _field.Height; }
 
         public Dame() { _field = new GameField<Dame>(); }
 
         public Dame(GameField<Dame> field)
         {
             _field = field;
-            Init();
         }
 
-        public void Init()
+        public override void Init()
         {
-            // TODO better init
             for (int i = 0; i < 8; i += 2)
             {
-                new DameFigure(_field, 0, i, false);
-                new DameFigure(_field, 1, i + 1, false);
-                new DameFigure(_field, 2, i, false);
-                new DameFigure(_field, 5, i + 1, true);
-                new DameFigure(_field, 6, i, true);
-                new DameFigure(_field, 7, i + 1, true);
+                foreach (int j in new int[] { 0, 1, 2, 5, 6, 7 })
+                    new DameFigure(_field, j, i + ((j % 2 == 1) ? 1 : 0), j > 2);
             }
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return _field.ToString();
         }
@@ -37,16 +36,75 @@ namespace cs_games.dame
 
     public class DameFigure : GameFigure<Dame>
     {
+        private Skin<Dame> skin = new DameCSBlockkursSkin();
+        public override string IMG
+        {
+            get => skin.getIMG(_player1, this);
+        }
+
+        public override string Name
+        {
+            get => "Pawn";
+        }
+
         public DameFigure(GameField<Dame> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+
+        public override bool CanMove()
+        {
+
+            if (Player1)
+            {
+                // unten
+                if (X < _field.Height - 1 && ((Y < _field.Width - 1 && _field[X - 1, Y + 1] == null) || (Y > 0 && _field[X - 1, Y - 1] == null)))
+                    return true;
+                return false;
+            }
+            else
+            {
+                // oben
+                if (X > 0 && ((Y < _field.Width - 1 && _field[X + 1, Y + 1] == null) || (Y > 0 && _field[X + 1, Y - 1] == null)))
+                    return true;
+                return false;
+            }
+        }
+
+        public override List<int[]> GetMoves()
+        {
+            return new List<int[]>();
+        }
+
+        public override void MoveTo(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
 
         public override char ToChar()
         {
             return (_player1) ? 'x' : 'o';
         }
+    }
 
-        public override void MoveTo()
+    public class DameChineseSkin : Skin<Dame>
+    {
+        public override string getIMG(bool player1, GameFigure<Dame> figure)
         {
-            throw new NotImplementedException();
+            return base.getIMG(player1, figure) + "dame/chinese_" + ((player1) ? "1" : "2") + ".png";
+        }
+    }
+
+    public class DameChineseColoredSkin : Skin<Dame>
+    {
+        public override string getIMG(bool player1, GameFigure<Dame> figure)
+        {
+            return base.getIMG(player1, figure) + "dame/chinese_colored_" + ((player1) ? "1" : "2") + ".png";
+        }
+    }
+
+    public class DameCSBlockkursSkin : Skin<Dame>
+    {
+        public override string getIMG(bool player1, GameFigure<Dame> figure)
+        {
+            return base.getIMG(player1, figure) + "dame/cs_blockkurs_" + ((player1) ? "1" : "2") + ".png";
         }
     }
 }

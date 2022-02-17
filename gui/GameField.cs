@@ -1,8 +1,18 @@
+using cs_games.data_objects;
+using cs_games.dame;
+using cs_games.chess;
+
 namespace cs_games
 {
-    public partial class Spiel : Form
+    public partial class FormGame : Form
     {
-        public Spiel()
+        private Game? _game;
+        public Game Game
+        {
+            set { _game = value; }
+        }
+
+        public FormGame()
         {
             InitializeComponent();
         }
@@ -21,8 +31,42 @@ namespace cs_games
         {
             //GameField.Controls.Add(new Button());
 
-            Games games = new Games();
+            FormGames games = new FormGames(this);
             games.ShowDialog();
+
+            if (_game == null)
+                return;
+
+            gameField.Controls.Clear();
+
+            _game.Init();
+
+            int size = Math.Min(gameField.Size.Width / _game.Width, (gameField.Size.Height - 25) / _game.Height);
+            int dx = (gameField.Size.Width - size * _game.Width) / 2;
+            int dy = (gameField.Size.Height - 25 - size * _game.Height) / 2 + 25;
+
+            for (int i = 0; i < _game.Width; i++)
+            {
+                for (int j = 0; j < _game.Height; j++)
+                {
+                    Button dynamicButton = new Button();
+                    dynamicButton.Size = new Size(size - 5, size - 5);
+                    dynamicButton.Location = new Point(dx + j * size, dy + i * size);
+                    dynamicButton.Enabled = false;
+
+                    switch (_game.Name)
+                    {
+                        case "Dame":
+                            new GameButton<Dame>(dynamicButton, (_game as Dame).Field[i, j]);
+                            break;
+                        case "Chess":
+                            new GameButton<Chess>(dynamicButton, (_game as Chess).Field[i, j]);
+                            break;
+                    }
+
+                    gameField.Controls.Add(dynamicButton);
+                }
+            }
         }
     }
 }

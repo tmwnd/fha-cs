@@ -1,6 +1,8 @@
-﻿namespace cs_games.chess
+﻿using cs_games.exceptions;
+
+namespace cs_games.chess
 {
-    internal class Chess : Game
+    public class Chess : Game
     {
         private GameField<Chess> _field;
         public GameField<Chess> Field
@@ -24,7 +26,7 @@
 
         public override void Init()
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public override string ToString()

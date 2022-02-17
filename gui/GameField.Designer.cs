@@ -1,6 +1,6 @@
 ﻿namespace cs_games
 {
-    partial class Spiel
+    partial class FormGame
     {
         /// <summary>
         ///  Required designer variable.

@@ -1,5 +1,7 @@
 using cs_games.dame;
 using cs_games.chess;
+using cs_games.tic_tac_toe;
+using cs_games.vier_gewinnt;
 
 using System.Text.Json;
 
@@ -8,17 +10,23 @@ namespace cs_games
     public abstract class Game
     {
         public static JsonElement config = JsonDocument.Parse(File.OpenText("D:/dev/fha-cs/config.json").ReadToEnd()).RootElement;
-        public static List<Game> games = new List<Game> { new Dame(), new Chess() };
+        public static List<Game> Games
+        {
+            get => new List<Game> { new Dame(), new Chess(), new TicTacToe(), new VierGewinnt() };
+        }
 
         public static string GetIMGPath(string game)
         {
             try
             {
-                return config.GetProperty("root_path").ToString() + config.GetProperty("games").GetProperty(game).ToString();
+                string ret = config.GetProperty("root_path").ToString() + config.GetProperty("games").GetProperty("folder").ToString() + game.ToLower() + ".png";
+                if (File.Exists(ret))
+                    return ret;
+                throw new Exception($"Spiel {game} wurde nicht gefunden");
             }
             catch
             {
-                return config.GetProperty("root_path").ToString() + config.GetProperty("games").GetProperty("default").ToString();
+                return config.GetProperty("root_path").ToString() + config.GetProperty("games").GetProperty("folder").ToString() + config.GetProperty("games").GetProperty("default").ToString();
             }
         }
 
@@ -56,10 +64,7 @@ namespace cs_games
         }
 
         // default ctor for already implemented games
-        public GameField()
-        {
-            _field = new GameFigure<G>?[8, 8];
-        }
+        public GameField() : this(8) { }
 
         // ctor for square fields
         public GameField(int x)
@@ -70,7 +75,7 @@ namespace cs_games
         // ctor for rectangular fields
         public GameField(int x, int y)
         {
-            _field = new GameFigure<G>?[x, x];
+            _field = new GameFigure<G>?[x, y];
         }
 
         public GameFigure<G>? this[int x, int y]
@@ -128,7 +133,11 @@ namespace cs_games
         public int Y { get; set; }
 
         protected bool _player1;
-        public bool Player1 { get; set; }
+        public bool Player1
+        {
+            get => _player1;
+            set => _player1 = value;
+        }
 
         protected GameField<G> _field;
         public GameField<G> Field
@@ -142,6 +151,10 @@ namespace cs_games
             set => _field = value;
         }
 
+        public virtual string? IMG { get; }
+
+        public virtual string? Name { get; }
+
         public GameFigure(GameField<G> field, int x, int y, bool player1)
         {
             _field = field;
@@ -150,7 +163,20 @@ namespace cs_games
         }
 
         // abstract area
+        public virtual bool CanMove()
+        {
+            return false;
+        }
         public abstract void MoveTo(int x, int y);
         public abstract char ToChar();
+    }
+
+    public abstract class Skin<G>
+    where G : Game
+    {
+        public virtual string getIMG(bool player1, GameFigure<G> figure)
+        {
+            return Game.config.GetProperty("root_path").ToString() + Game.config.GetProperty("skins").ToString();
+        }
     }
 }

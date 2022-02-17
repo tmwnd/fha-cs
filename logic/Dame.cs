@@ -36,16 +36,57 @@ namespace cs_games.dame
 
     public class DameFigure : GameFigure<Dame>
     {
+        private Skin<Dame> skin = new DameChineseSkin();
+        public override string IMG
+        {
+            get => skin.getIMG(_player1, this);
+        }
+
+        public override string Name
+        {
+            get => "Pawn";
+        }
+
         public DameFigure(GameField<Dame> field, int x, int y, bool player1) : base(field, x, y, player1) { }
 
-        public override char ToChar()
+        public override bool CanMove()
         {
-            return (_player1) ? 'x' : 'o';
+            if (Player1)
+            {
+                // unten
+                return false;
+            }
+            else
+            {
+                // oben
+                return false;
+            }
         }
 
         public override void MoveTo(int x, int y)
         {
             throw new NotImplementedException();
+        }
+
+        public override char ToChar()
+        {
+            return (_player1) ? 'x' : 'o';
+        }
+    }
+
+    public class DameChineseSkin : Skin<Dame>
+    {
+        public override string getIMG(bool player1, GameFigure<Dame> figure)
+        {
+            return base.getIMG(player1, figure) + "dame/chinese_" + ((player1) ? "1" : "2") + ".png";
+        }
+    }
+
+    public class DameChineseColoredSkin : Skin<Dame>
+    {
+        public override string getIMG(bool player1, GameFigure<Dame> figure)
+        {
+            return base.getIMG(player1, figure) + "dame/chinese_colored_" + ((player1) ? "1" : "2") + ".png";
         }
     }
 }

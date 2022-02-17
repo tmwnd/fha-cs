@@ -1,5 +1,8 @@
 media/dame/cs_blockkurs_*.png
 
+# vs
+.vs/
+
 # logic
 logic/.vscode/
 logic/bin/

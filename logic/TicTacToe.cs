@@ -41,15 +41,26 @@ namespace cs_games.tic_tac_toe
 
         public override bool CheckIfWin(out bool winner)
         {
-            // TODO . . .
             if (CheckRow(out winner, _field[0, 0], _field[0, 1], _field[0, 2])) { return true; }
+            if (CheckRow(out winner, _field[1, 0], _field[1, 1], _field[1, 2])) { return true; }
+            if (CheckRow(out winner, _field[2, 0], _field[2, 1], _field[2, 2])) { return true; }
+
+            if (CheckRow(out winner, _field[0, 0], _field[1, 0], _field[2, 0])) { return true; }
+            if (CheckRow(out winner, _field[0, 1], _field[1, 1], _field[2, 1])) { return true; }
+            if (CheckRow(out winner, _field[0, 2], _field[1, 2], _field[2, 2])) { return true; }
+
+            if (CheckRow(out winner, _field[0, 0], _field[1, 1], _field[2, 2])) { return true; }
+            if (CheckRow(out winner, _field[0, 2], _field[1, 1], _field[2, 0])) { return true; }
             return false;
         }
 
         private bool CheckRow(out bool winner, params GameFigure<TicTacToe>?[] figures)
         {
-            winner = false;
-            return false;
+            winner = figures[0]?.Player1 ?? false;
+            foreach (GameFigure<TicTacToe>? figure in figures)
+                if ((((TicTacToeFigure?)figure)?.CanMove() ?? false) || (winner != (figure?.Player1 ?? false)))
+                    return false;
+            return true;
         }
 
         public override string ToString()

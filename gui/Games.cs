@@ -38,5 +38,10 @@
                 groupBoxGames.Controls.Add(dynamicButton);
             }
         }
+
+        public FormGames(FormGame game) : this()
+        {
+            _game = game;
+        }
     }
 }

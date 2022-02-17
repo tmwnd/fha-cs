@@ -1,5 +1,5 @@
 ﻿using cs_games;
-using cs_games.tic_tac_toe;
+using cs_games.chess;
 
 // Dame dame = new Dame();
 // dame.Init();
@@ -11,7 +11,9 @@ using cs_games.tic_tac_toe;
 // VierGewinnt vierGewinnt = new VierGewinnt();
 // Console.WriteLine(vierGewinnt);
 
-TicTacToe ttt = new TicTacToe();
-ttt.Init();
-ttt.CheckIfWin(out bool winner);
-Console.WriteLine(ttt);
+// TicTacToe ttt = new TicTacToe();
+// ttt.Init();
+// ttt.CheckIfWin(out bool winner);
+// Console.WriteLine(ttt);
+
+new Chess();

@@ -19,16 +19,6 @@ namespace cs_games
             InitializeComponent();
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void ButtonStartGameClick(object sender, EventArgs e)
         {
             FormGames games = new FormGames(this);
@@ -94,11 +84,6 @@ namespace cs_games
                     gameField.Controls.Add(dynamicButton);
                 }
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

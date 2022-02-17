@@ -1,5 +1,5 @@
 ﻿using cs_games;
-using cs_games.chess;
+using cs_games.dame;
 
 // Dame dame = new Dame();
 // dame.Init();
@@ -16,4 +16,8 @@ using cs_games.chess;
 // ttt.CheckIfWin(out bool winner);
 // Console.WriteLine(ttt);
 
-new Chess();
+// Dame d = new Dame();
+// d.Init();
+// Console.WriteLine(d.Field[0, 0].IMG);
+
+Game.SetConfig();

@@ -386,7 +386,7 @@ namespace cs_games.chess
             {
                 for (int j = -1; j < 2; j++)
                 {
-                    if (!(Field[i, j]?.Player1 == Player1))
+                    if (!(Field[X + i, Y + j]?.Player1 == Player1))
                     {
                         if (IsAllowed(X + i, Y + j))
                             ret.Add(new int[] { X + i, Y + j });

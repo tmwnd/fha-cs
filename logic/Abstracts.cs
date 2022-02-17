@@ -9,11 +9,20 @@ namespace cs_games
 {
     public abstract class Game
     {
-        private static string configPath = File.OpenText($"{Directory.GetCurrentDirectory()}/../../../../config.json").ReadToEnd();
-        public static JsonElement config = JsonDocument.Parse(configPath.Substring(0, configPath.LastIndexOf('}'))+ $", \"root_path\":\"{Directory.GetCurrentDirectory().Replace("\\", "/")}/../../../../\"}}").RootElement;
+
+        public static JsonElement config = SetConfig();
         public static List<Game> Games
         {
             get => new List<Game> { new Dame(), new Chess(), new TicTacToe(), new VierGewinnt() };
+        }
+
+        public static JsonElement SetConfig()
+        {
+            string current = Directory.GetCurrentDirectory().ToString().Replace("\\", "/") + "/../../../../";
+            if (current.Length < 50) // ew remove pls UwU; im sowwy but vs cOwOde mag vs nicht ¯\_(ツ)_/¯
+                current = "D:/dev/fha-cs/";
+            string config_raw = File.OpenText(current + "config.json").ReadToEnd();
+            return JsonDocument.Parse(config_raw.Substring(0, config_raw.LastIndexOf('}')) + $", \"root_path\":\"{current}\"}}").RootElement;
         }
 
         public static string GetIMGPath(string game)
@@ -29,17 +38,6 @@ namespace cs_games
             {
                 return config.GetProperty("root_path").ToString() + config.GetProperty("games").GetProperty("folder").ToString() + config.GetProperty("games").GetProperty("default").ToString();
             }
-        }
-
-        private static string ReplaceLastOccurrence(string Source, string Find, string Replace)
-        {
-            int place = Source.LastIndexOf(Find);
-
-            if (place == -1)
-                return Source;
-
-            string result = Source.Remove(place, Find.Length).Insert(place, Replace);
-            return result;
         }
 
         public abstract string Name { get; }
@@ -196,7 +194,7 @@ namespace cs_games
         public virtual bool CanMove()
         {
             // Player1 => unten
-            return false;
+            return GetMoves().Count > 0;
         }
         public virtual List<int[]> GetMoves()
         {

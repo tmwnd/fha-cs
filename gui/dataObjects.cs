@@ -53,6 +53,8 @@ namespace cs_games.data_objects
 
             if (_field[X, Y] != null)
             {
+                System.Diagnostics.Debug.WriteLine(X);
+                System.Diagnostics.Debug.WriteLine(Y);
                 if (_field[X, Y]?.CanMove() ?? false)
                 {
                     Enabled = true;

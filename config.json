@@ -1,5 +1,4 @@
 {
-    "root_path": "D:/dev/fha-cs/",
     "games": {
         "folder": "media/games/",
         "default": "default.png"

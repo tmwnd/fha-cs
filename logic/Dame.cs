@@ -55,8 +55,14 @@ namespace cs_games.dame
 
         public override bool CanMove()
         {
-            if (CanTake())
-                return true;
+            bool canTake = false;
+            // for (int i = 0; i < Field.Height || !canTake; i++)
+            //     for (int j = 0; j < Field.Width || !canTake; j++)
+            //         canTake = canTake || ((((DameFigure?)Field[i, j])?.CanTake() ?? false) && Field[i, j]?.Player1 == Player1);
+            if (canTake)
+            {
+                return canTake == CanTake();
+            }
             if (Player1)
             {
                 // unten
@@ -72,7 +78,7 @@ namespace cs_games.dame
             return false;
         }
 
-        private bool CanTake()
+        public bool CanTake()
         {
             if (Player1)
             {
@@ -103,7 +109,10 @@ namespace cs_games.dame
         {
             List<int[]> ret = new List<int[]>();
             // TODO (Player1) ? -1 : 1
-            bool canTake = CanTake();
+            bool canTake = false;
+            // for (int i = 0; i < Field.Height || !canTake; i++)
+            //     for (int j = 0; j < Field.Width || !canTake; j++)
+            //         canTake = canTake || ((((DameFigure?)Field[i, j])?.CanTake() ?? false) && Field[i, j]?.Player1 == Player1);
             if (Player1)
             {
                 // friendly move

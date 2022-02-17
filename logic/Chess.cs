@@ -49,6 +49,12 @@ namespace cs_games.chess
             new King(Field, 4, 7, false);
         }
 
+        public override bool CheckIfWin(out bool winner)
+        {
+            winner = false;
+            return false;
+        }
+
         public override string ToString()
         {
             return Field.ToString();
@@ -251,7 +257,7 @@ namespace cs_games.chess
                 if (Field[i, Y] != null)
                     break;
             }
-            for (int i = X; i >=0; i--)
+            for (int i = X; i >= 0; i--)
             {
                 result.Add(new int[] { i, Y });
                 if (Field[i, Y] != null)
@@ -273,23 +279,23 @@ namespace cs_games.chess
             #region diagonal
             for (int i = X, j = Y; i < 8 && j < 8; i++, j++)
             {
-                result.Add(new int[]{ i, j });
-                if(Field[X, i] != null)
+                result.Add(new int[] { i, j });
+                if (Field[X, i] != null)
                     break;
             }
-            for (int i = X, j = Y; i < 8 && j >=0; i++, j--)
+            for (int i = X, j = Y; i < 8 && j >= 0; i++, j--)
             {
                 result.Add(new int[] { i, j });
                 if (Field[X, i] != null)
                     break;
             }
-            for (int i = X, j = Y; i>=0 && j < 8; i--, j++)
+            for (int i = X, j = Y; i >= 0 && j < 8; i--, j++)
             {
                 result.Add(new int[] { i, j });
                 if (Field[X, i] != null)
                     break;
             }
-            for (int i = X, j = Y; i >= 0&& j >= 0; i--, j--)
+            for (int i = X, j = Y; i >= 0 && j >= 0; i--, j--)
             {
                 result.Add(new int[] { i, j });
                 if (Field[X, i] != null)
@@ -317,8 +323,8 @@ namespace cs_games.chess
             {
                 Field[X, Y] = null;
                 Field[x, y] = this;
-                X= x;
-                Y= y;
+                X = x;
+                Y = y;
                 if (Y == 7 || Y == 0)
                 {
                     Field[X, Y] = null;

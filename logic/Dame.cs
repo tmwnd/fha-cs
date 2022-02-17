@@ -21,11 +21,15 @@ namespace cs_games.dame
 
         public override void Init()
         {
-            for (int i = 0; i < 8; i += 2)
-            {
-                foreach (int j in new int[] { 0, 1, 2, 5, 6, 7 })
-                    new DameFigure(_field, j, i + ((j % 2 == 1) ? 1 : 0), j > 2);
-            }
+            foreach (int i in new int[] { 0, 1, 2, 5, 6, 7 })
+                for (int j = 0; j < 8; j += 2)
+                    new DameFigure(_field, i, j + ((i % 2 == 1) ? 1 : 0), i > 2);
+        }
+
+        public override bool CheckIfWin(out bool winner)
+        {
+            winner = false;
+            return false;
         }
 
         public override string ToString()
@@ -51,44 +55,91 @@ namespace cs_games.dame
 
         public override bool CanMove()
         {
-
+            if (CanTake())
+                return true;
             if (Player1)
             {
                 // unten
                 if (X > 0 && ((Y < Field.Width - 1 && Field[X - 1, Y + 1] == null) || (Y > 0 && Field[X - 1, Y - 1] == null)))
                     return true;
-                return false;
             }
             else
             {
                 // oben
                 if (X < Field.Height - 1 && ((Y < Field.Width - 1 && Field[X + 1, Y + 1] == null) || (Y > 0 && Field[X + 1, Y - 1] == null)))
                     return true;
-                return false;
             }
+            return false;
+        }
+
+        private bool CanTake()
+        {
+            if (Player1)
+            {
+                // unten
+                if (X > 1)
+                {
+                    if (Y < Field.Width - 2 && Field[X - 1, Y + 1] != null && Field[X - 1, Y + 1]?.Player1 != Player1 && Field[X - 2, Y + 2] == null)
+                        return true;
+                    if (Y > 1 && Field[X - 1, Y - 1] != null && Field[X - 1, Y - 1]?.Player1 != Player1 && Field[X - 2, Y - 2] == null)
+                        return true;
+                }
+            }
+            else
+            {
+                // oben
+                if (X < _field.Height - 2)
+                {
+                    if (Y < Field.Width - 2 && Field[X + 1, Y + 1] != null && Field[X + 1, Y + 1]?.Player1 != Player1 && Field[X + 2, Y + 2] == null)
+                        return true;
+                    if (Y > 1 && Field[X + 1, Y - 1] != null && Field[X + 1, Y - 1]?.Player1 != Player1 && Field[X + 2, Y - 2] == null)
+                        return true;
+                }
+            }
+            return false;
         }
 
         public override List<int[]> GetMoves()
         {
             List<int[]> ret = new List<int[]>();
+            // TODO (Player1) ? -1 : 1
+            bool canTake = CanTake();
             if (Player1)
             {
-                if (X > 0)
+                // friendly move
+                if (!canTake && X > 0)
                 {
                     if (Y < Field.Width - 1 && Field[X - 1, Y + 1] == null)
                         ret.Add(new int[] { X - 1, Y + 1 });
                     if (Y > 0 && Field[X - 1, Y - 1] == null)
                         ret.Add(new int[] { X - 1, Y - 1 });
                 }
+                // take
+                if (X > 1)
+                {
+                    if (Y < Field.Width - 2 && Field[X - 1, Y + 1] != null && Field[X - 1, Y + 1]?.Player1 != Player1 && Field[X - 2, Y + 2] == null)
+                        ret.Add(new int[] { X - 2, Y + 2 });
+                    if (Y > 1 && Field[X - 1, Y - 1] != null && Field[X - 1, Y - 1]?.Player1 != Player1 && Field[X - 2, Y - 2] == null)
+                        ret.Add(new int[] { X - 2, Y - 2 });
+                }
             }
             else
             {
-                if (X < _field.Height - 1)
+                // friendly move
+                if (!canTake && X < _field.Height - 1)
                 {
                     if (Y < Field.Width - 1 && Field[X + 1, Y + 1] == null)
                         ret.Add(new int[] { X + 1, Y + 1 });
                     if (Y > 0 && Field[X + 1, Y - 1] == null)
                         ret.Add(new int[] { X + 1, Y - 1 });
+                }
+                // take
+                if (X < _field.Height - 2)
+                {
+                    if (Y < Field.Width - 2 && Field[X + 1, Y + 1] != null && Field[X + 1, Y + 1]?.Player1 != Player1 && Field[X + 2, Y + 2] == null)
+                        ret.Add(new int[] { X + 2, Y + 2 });
+                    if (Y > 1 && Field[X + 1, Y - 1] != null && Field[X + 1, Y - 1]?.Player1 != Player1 && Field[X + 2, Y - 2] == null)
+                        ret.Add(new int[] { X + 2, Y - 2 });
                 }
             }
             return ret;
@@ -96,6 +147,9 @@ namespace cs_games.dame
 
         public override void MoveTo(int x, int y)
         {
+            if (Math.Abs(X - x) == 2 && Math.Abs(Y - y) == 2)
+                _field[(X + x) / 2, (Y + y) / 2] = null;
+
             _field.Swap(X, Y, x, y);
             X = x;
             Y = y;

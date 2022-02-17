@@ -45,27 +45,28 @@ namespace cs_games
             int dx = (gameField.Size.Width - size * _game.Width) / 2;
             int dy = (gameField.Size.Height - 25 - size * _game.Height) / 2 + 25;
 
+            // TODO remove switch
             switch (_game.Name)
             {
                 case "Dame":
-                    GameButton<Dame>.Create(((Dame)_game).Field);
+                    GameButton<Dame>.Create(((Dame)_game).Field, (Dame)_game);
                     break;
                 case "Chess":
-                    GameButton<Chess>.Create(((Chess)_game).Field);
+                    GameButton<Chess>.Create(((Chess)_game).Field, (Chess)_game);
                     break;
                 case "TicTacToe":
-                    GameButton<TicTacToe>.Create(((TicTacToe)_game).Field);
+                    GameButton<TicTacToe>.Create(((TicTacToe)_game).Field, (TicTacToe)_game);
                     break;
                 case "VierGewinnt":
-                    GameButton<VierGewinnt>.Create(((VierGewinnt)_game).Field);
+                    GameButton<VierGewinnt>.Create(((VierGewinnt)_game).Field, (VierGewinnt)_game);
                     break;
                 default:
                     throw new Exception($"Spiel {_game.Name} wurde noch nicht implementert; Gerne auf https://github.com/tmwnd/fha-cs anfragen");
             }
 
-            for (int i = 0; i < _game.Width; i++)
+            for (int i = 0; i < _game.Height; i++)
             {
-                for (int j = 0; j < _game.Height; j++)
+                for (int j = 0; j < _game.Width; j++)
                 {
 
                     Button dynamicButton;

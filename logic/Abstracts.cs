@@ -129,11 +129,19 @@ namespace cs_games
     where G : Game
     {
         protected int _x, _y;
-        public int X { get; set; }
-        public int Y { get; set; }
+        public virtual int X
+        {
+            get => _x;
+            set => _x = value;
+        }
+        public virtual int Y
+        {
+            get => _y;
+            set => _y = value;
+        }
 
         protected bool _player1;
-        public bool Player1
+        public virtual bool Player1
         {
             get => _player1;
             set => _player1 = value;
@@ -158,15 +166,23 @@ namespace cs_games
         public GameFigure(GameField<G> field, int x, int y, bool player1)
         {
             _field = field;
-            _player1 = player1;
+            Player1 = player1;
+            X = x;
+            Y = y;
             field[x, y] = this;
         }
 
         // abstract area
         public virtual bool CanMove()
         {
+            // Player1 => unten
             return false;
         }
+        public virtual List<int[]> GetMoves()
+        {
+            return new List<int[]>();
+        }
+
         public abstract void MoveTo(int x, int y);
         public abstract char ToChar();
     }

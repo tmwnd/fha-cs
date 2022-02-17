@@ -36,7 +36,7 @@ namespace cs_games.dame
 
     public class DameFigure : GameFigure<Dame>
     {
-        private Skin<Dame> skin = new DameChineseSkin();
+        private Skin<Dame> skin = new DameCSBlockkursSkin();
         public override string IMG
         {
             get => skin.getIMG(_player1, this);
@@ -51,16 +51,26 @@ namespace cs_games.dame
 
         public override bool CanMove()
         {
+
             if (Player1)
             {
                 // unten
+                if (X < _field.Height - 1 && ((Y < _field.Width - 1 && _field[X - 1, Y + 1] == null) || (Y > 0 && _field[X - 1, Y - 1] == null)))
+                    return true;
                 return false;
             }
             else
             {
                 // oben
+                if (X > 0 && ((Y < _field.Width - 1 && _field[X + 1, Y + 1] == null) || (Y > 0 && _field[X + 1, Y - 1] == null)))
+                    return true;
                 return false;
             }
+        }
+
+        public override List<int[]> GetMoves()
+        {
+            return new List<int[]>();
         }
 
         public override void MoveTo(int x, int y)
@@ -87,6 +97,14 @@ namespace cs_games.dame
         public override string getIMG(bool player1, GameFigure<Dame> figure)
         {
             return base.getIMG(player1, figure) + "dame/chinese_colored_" + ((player1) ? "1" : "2") + ".png";
+        }
+    }
+
+    public class DameCSBlockkursSkin : Skin<Dame>
+    {
+        public override string getIMG(bool player1, GameFigure<Dame> figure)
+        {
+            return base.getIMG(player1, figure) + "dame/cs_blockkurs_" + ((player1) ? "1" : "2") + ".png";
         }
     }
 }

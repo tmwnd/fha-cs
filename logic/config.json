@@ -1,0 +1,7 @@
+﻿{
+    "games": {
+        "folder": "media/games/",
+        "default": "default.png"
+    },
+    "skins": "media/"
+}

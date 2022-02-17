@@ -9,7 +9,7 @@ namespace cs_games
 {
     public abstract class Game
     {
-        public static JsonElement config = JsonDocument.Parse(File.OpenText("D:/dev/fha-cs/config.json").ReadToEnd()).RootElement;
+        public static JsonElement config = JsonDocument.Parse(File.OpenText($"{Directory.GetCurrentDirectory()}/../../../../config.json").ReadToEnd()).RootElement;
         public static List<Game> Games
         {
             get => new List<Game> { new Dame(), new Chess(), new TicTacToe(), new VierGewinnt() };
@@ -17,6 +17,7 @@ namespace cs_games
 
         public static string GetIMGPath(string game)
         {
+            config = JsonDocument.Parse(config.GetRawText().Replace("}", "") + $", \"root_path\":{Directory.GetCurrentDirectory()}/../../../../").RootElement;
             try
             {
                 string ret = config.GetProperty("root_path").ToString() + config.GetProperty("games").GetProperty("folder").ToString() + game.ToLower() + ".png";

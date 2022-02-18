@@ -29,12 +29,15 @@
         private void InitializeComponent()
         {
             this.gameField = new System.Windows.Forms.GroupBox();
+            this.textboxMatchHistory = new System.Windows.Forms.TextBox();
             this.buttonNeu = new System.Windows.Forms.Button();
             this.ButtonStartGame = new System.Windows.Forms.Button();
             this.labelPlayerNow = new System.Windows.Forms.Label();
             this.spieler1 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.spieler2 = new System.Windows.Forms.Label();
+            this.labelPunkteSpieler1 = new System.Windows.Forms.Label();
+            this.labelPunkteSpieler2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // gameField
@@ -45,6 +48,17 @@
             this.gameField.TabIndex = 0;
             this.gameField.TabStop = false;
             this.gameField.Text = "Spielfeld";
+            // 
+            // textboxMatchHistory
+            // 
+            this.textboxMatchHistory.Location = new System.Drawing.Point(600, 200);
+            this.textboxMatchHistory.Multiline = true;
+            this.textboxMatchHistory.Name = "textboxMatchHistory";
+            this.textboxMatchHistory.ReadOnly = true;
+            this.textboxMatchHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textboxMatchHistory.Size = new System.Drawing.Size(150, 160);
+            this.textboxMatchHistory.TabIndex = 10;
+            this.textboxMatchHistory.Text = "Letzte Spiele:";
             // 
             // buttonNeu
             // 
@@ -103,11 +117,35 @@
             this.spieler2.TabIndex = 5;
             this.spieler2.Text = "Spieler2";
             // 
+            // labelPunkteSpieler1
+            // 
+            this.labelPunkteSpieler1.AutoSize = true;
+            this.labelPunkteSpieler1.Location = new System.Drawing.Point(600, 175);
+            this.labelPunkteSpieler1.Name = "labelPunkteSpieler1";
+            this.labelPunkteSpieler1.Size = new System.Drawing.Size(13, 15);
+            this.labelPunkteSpieler1.TabIndex = 7;
+            this.labelPunkteSpieler1.Text = "0";
+            this.labelPunkteSpieler1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelPunkteSpieler2
+            // 
+            this.labelPunkteSpieler2.AutoSize = true;
+            this.labelPunkteSpieler2.Location = new System.Drawing.Point(686, 175);
+            this.labelPunkteSpieler2.Name = "labelPunkteSpieler2";
+            this.labelPunkteSpieler2.Size = new System.Drawing.Size(13, 15);
+            this.labelPunkteSpieler2.TabIndex = 8;
+            this.labelPunkteSpieler2.Text = "0";
+            this.labelPunkteSpieler2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // FormGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textboxMatchHistory);
+            this.Controls.Add(this.labelPunkteSpieler2);
+            this.Controls.Add(this.labelPunkteSpieler1);
             this.Controls.Add(this.buttonNeu);
             this.Controls.Add(this.spieler2);
             this.Controls.Add(this.label1);
@@ -131,5 +169,8 @@
         private Label label1;
         private Label spieler2;
         private Button buttonNeu;
+        private Label labelPunkteSpieler1;
+        private Label labelPunkteSpieler2;
+        private TextBox textboxMatchHistory;
     }
 }

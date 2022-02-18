@@ -27,7 +27,7 @@ namespace cs_games.tic_tac_toe
         {
             set => TicTacToe.skinIndex = value;
         }
-        
+
         public override int Width { get => _field.Width; }
         public override int Height { get => _field.Height; }
 
@@ -81,6 +81,40 @@ namespace cs_games.tic_tac_toe
         }
     }
 
+    public class TicTacToeFigure : GameFigure<TicTacToe>
+    {
+        public override string? IMG
+        {
+            get => TicTacToe.skins[TicTacToe.skinIndex].getIMG(Player1, this);
+        }
+
+        public override string Name { get => "TikTakToe"; }
+
+        public override bool Player1
+        {
+            get => base.Player1;
+        }
+
+        public TicTacToeFigure(GameField<TicTacToe> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+
+        public override bool CanMove() { return false; }
+
+        private bool CanTake() { return false; } // lol
+        public override List<int[]> GetMoves() { return new List<int[]> { new int[] { X, Y } }; }
+        public override bool MoveTo(int x, int y)
+        {
+            _field[x, y] = null; // clear field
+            new TicTacToeFigure(Field, X, Y, Game.Player1); // error without clear
+
+            return true;
+        }
+
+        public override char ToChar()
+        {
+            return (_player1) ? 'x' : 'o';
+        }
+    }
+
     public class UnusedTicTacToeFigure : TicTacToeFigure
     {
         public override string? IMG
@@ -101,41 +135,6 @@ namespace cs_games.tic_tac_toe
         }
 
         public UnusedTicTacToeFigure(GameField<TicTacToe> field, int x, int y, bool player1) : base(field, x, y, player1) { }
-    }
-
-    public class TicTacToeFigure : GameFigure<TicTacToe>
-    {
-        public override string? IMG
-        {
-            get => TicTacToe.skins[TicTacToe.skinIndex].getIMG(Player1, this);
-        }
-
-        public override string Name
-        {
-            get => (Player1) ? "Kreuz" : "Kreis";
-        }
-
-        public override bool Player1
-        {
-            get => base.Player1;
-        }
-
-        public TicTacToeFigure(GameField<TicTacToe> field, int x, int y, bool player1) : base(field, x, y, player1) { }
-
-        public override bool CanMove() { return false; }
-
-        private bool CanTake() { return false; } // lol
-        public override List<int[]> GetMoves() { return new List<int[]> { new int[] { X, Y } }; }
-        public override void MoveTo(int x, int y)
-        {
-            _field[x, y] = null; // clear field
-            new TicTacToeFigure(Field, X, Y, Game.Player1); // error without clear
-        }
-
-        public override char ToChar()
-        {
-            return (_player1) ? 'x' : 'o';
-        }
     }
 
     public class TicTacToeDefaultSkin : Skin<TicTacToe>

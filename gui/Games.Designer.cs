@@ -43,7 +43,7 @@
             // 
             // label1
             // 
-            this.label1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.label1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.label1.Location = new System.Drawing.Point(25, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(250, 50);

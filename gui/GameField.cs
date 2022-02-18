@@ -37,20 +37,25 @@ namespace cs_games
             int dx = (gameField.Size.Width - size * _game.Width) / 2;
             int dy = (gameField.Size.Height - 25 - size * _game.Height) / 2 + 25;
 
+            List<string> history = _game.History;
+            textboxMatchHistory.Text = $"Letze Spiele ({history.Count}):";
+            foreach (string line in history)
+                textboxMatchHistory.Text += Environment.NewLine + line;
+
             // TODO remove switch
             switch (_game.Name)
             {
                 case "Dame":
-                    GameButton<Dame>.Create(((Dame)_game).Field, (Dame)_game, labelPlayerNow);
+                    GameButton<Dame>.Create(((Dame)_game).Field, (Dame)_game, labelPlayerNow, labelPunkteSpieler1, labelPunkteSpieler2);
                     break;
                 case "Chess":
-                    GameButton<Chess>.Create(((Chess)_game).Field, (Chess)_game, labelPlayerNow);
+                    GameButton<Chess>.Create(((Chess)_game).Field, (Chess)_game, labelPlayerNow, labelPunkteSpieler1, labelPunkteSpieler2);
                     break;
                 case "TicTacToe":
-                    GameButton<TicTacToe>.Create(((TicTacToe)_game).Field, (TicTacToe)_game, labelPlayerNow);
+                    GameButton<TicTacToe>.Create(((TicTacToe)_game).Field, (TicTacToe)_game, labelPlayerNow, labelPunkteSpieler1, labelPunkteSpieler2);
                     break;
                 case "VierGewinnt":
-                    GameButton<VierGewinnt>.Create(((VierGewinnt)_game).Field, (VierGewinnt)_game, labelPlayerNow);
+                    GameButton<VierGewinnt>.Create(((VierGewinnt)_game).Field, (VierGewinnt)_game, labelPlayerNow, labelPunkteSpieler1, labelPunkteSpieler2);
                     break;
             }
 
@@ -93,6 +98,8 @@ namespace cs_games
             if (_game == null)
                 return;
 
+            Game.Player1 = true;
+
             _game.Init();
             switch (_game.Name)
             {
@@ -111,6 +118,8 @@ namespace cs_games
             }
 
             labelPlayerNow.Text = "Aktuell: " + Game.userList[0];
+            labelPunkteSpieler1.Text = "0";
+            labelPunkteSpieler2.Text = "0";
         }
 
         private void FormGame_Load(object sender, EventArgs e)

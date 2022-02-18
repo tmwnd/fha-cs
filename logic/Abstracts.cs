@@ -1,10 +1,8 @@
-using cs_games.dame;
+using cs_games.api;
 using cs_games.chess;
+using cs_games.dame;
 using cs_games.tic_tac_toe;
 using cs_games.vier_gewinnt;
-
-using cs_games.api;
-
 using System.Text.Json;
 
 namespace cs_games
@@ -78,6 +76,21 @@ namespace cs_games
         public virtual int SkinIndex
         {
             set { }
+        }
+
+        public virtual List<string> History
+        {
+            get
+            {
+                List<string> ret = new List<string>();
+                JsonElement history = api.API.SQLQuery(
+                    $"SELECT match_history.ID as mID, spieler.Name FROM match_history JOIN spieler ON match_history.sieger = spieler.ID WHERE Typ = \'{Name}\' ORDER BY match_history.ID DESC",
+                    "Keine Historie vorhanden"
+                    );
+                for (int i = 0; i < history.GetArrayLength(); i++)
+                    ret.Add(history[i].GetProperty("mID").ToString() + " (" + history[i].GetProperty("Name").ToString() + ")");
+                return ret;
+            }
         }
 
         public abstract int Width { get; }
@@ -215,6 +228,11 @@ namespace cs_games
             set => _field = value;
         }
 
+        // dir with skins
+        public virtual string IMG_DIR
+        {
+            get => Game.config.GetProperty("root_path").ToString() + Game.config.GetProperty("skins").ToString();
+        }
         public virtual string? IMG { get; }
 
         public virtual string? Name { get; }
@@ -239,7 +257,7 @@ namespace cs_games
             return new List<int[]> { };
         }
 
-        public abstract void MoveTo(int x, int y);
+        public abstract bool MoveTo(int x, int y);
         public abstract char ToChar();
     }
 

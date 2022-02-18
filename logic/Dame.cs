@@ -22,7 +22,8 @@ namespace cs_games.dame
                 return ret;
             }
         }
-        public override int SkinIndex { 
+        public override int SkinIndex
+        {
             set => Dame.skinIndex = value;
         }
 
@@ -100,7 +101,7 @@ namespace cs_games.dame
             return false;
         }
 
-        public bool CanTake()
+        public virtual bool CanTake()
         {
             if (Player1)
             {
@@ -176,26 +177,130 @@ namespace cs_games.dame
             return ret;
         }
 
-        public override void MoveTo(int x, int y)
+        public override bool MoveTo(int x, int y)
         {
-            bool cont = false;
+            bool take = false;
             if (Math.Abs(X - x) == 2 && Math.Abs(Y - y) == 2)
             {
                 _field[(X + x) / 2, (Y + y) / 2] = null;
-                cont = true;
+                take = true;
             }
 
             _field.Swap(X, Y, x, y);
             X = x;
             Y = y;
 
-            if (cont && CanTake())
+            if (take && CanTake())
                 Game.Player1 = !Game.Player1;
+
+            if ((Player1 && X == _field.Height) || (!Player1 && X == 0))
+                _field[X, Y] = new BetterDameFigure(this);
+            return take;
         }
 
         public override char ToChar()
         {
             return (_player1) ? 'x' : 'o';
+        }
+    }
+
+    public class BetterDameFigure : DameFigure
+    {
+        public BetterDameFigure(GameField<Dame> field, int x, int y, bool player1) : base(field, x, y, player1) { }
+
+        // copy ctor
+        public BetterDameFigure(DameFigure old) : this(old.Field, old.X, old.Y, old.Player1) { }
+
+        public override string IMG
+        {
+            // TODO new skin
+            get => Dame.skins[Dame.skinIndex].getIMG(_player1, this);
+        }
+
+        public override bool CanMove()
+        {
+            if (Game.Player1 != Player1) // not your turn
+                return false;
+
+            bool canTake = CanTake();
+            for (int i = 0; i < Field.Height && !canTake; i++)
+                for (int j = 0; j < Field.Width && !canTake; j++)
+                    canTake = canTake || ((((DameFigure?)Field[i, j])?.CanTake() ?? false) && Field[i, j]?.Player1 == Player1);
+
+            if (canTake) // some stone can take
+                return canTake == CanTake();
+
+            // unten
+            if (X > 0 && ((Y < Field.Width - 1 && Field[X - 1, Y + 1] == null) || (Y > 0 && Field[X - 1, Y - 1] == null)))
+                return true;
+            // oben
+            if (X < Field.Height - 1 && ((Y < Field.Width - 1 && Field[X + 1, Y + 1] == null) || (Y > 0 && Field[X + 1, Y - 1] == null)))
+                return true;
+            return false;
+        }
+
+        public override bool CanTake()
+        {
+            // unten
+            if (X > 1)
+            {
+                if (Y < Field.Width - 2 && Field[X - 1, Y + 1] != null && Field[X - 1, Y + 1]?.Player1 != Player1 && Field[X - 2, Y + 2] == null)
+                    return true;
+                if (Y > 1 && Field[X - 1, Y - 1] != null && Field[X - 1, Y - 1]?.Player1 != Player1 && Field[X - 2, Y - 2] == null)
+                    return true;
+            }
+            // oben
+            if (X < _field.Height - 2)
+            {
+                if (Y < Field.Width - 2 && Field[X + 1, Y + 1] != null && Field[X + 1, Y + 1]?.Player1 != Player1 && Field[X + 2, Y + 2] == null)
+                    return true;
+                if (Y > 1 && Field[X + 1, Y - 1] != null && Field[X + 1, Y - 1]?.Player1 != Player1 && Field[X + 2, Y - 2] == null)
+                    return true;
+            }
+            return false;
+        }
+
+        public override List<int[]> GetMoves()
+        {
+            List<int[]> ret = new List<int[]>();
+
+            bool canTake = false;
+            for (int i = 0; i < Field.Height && !canTake; i++)
+                for (int j = 0; j < Field.Width && !canTake; j++)
+                    canTake = canTake || ((((DameFigure?)Field[i, j])?.CanTake() ?? false) && Field[i, j]?.Player1 == Player1);
+            // friendly move
+            if (!canTake && X > 0)
+            {
+                if (Y < Field.Width - 1 && Field[X - 1, Y + 1] == null)
+                    ret.Add(new int[] { X - 1, Y + 1 });
+                if (Y > 0 && Field[X - 1, Y - 1] == null)
+                    ret.Add(new int[] { X - 1, Y - 1 });
+            }
+            // take
+            if (X > 1)
+            {
+                if (Y < Field.Width - 2 && Field[X - 1, Y + 1] != null && Field[X - 1, Y + 1]?.Player1 != Player1 && Field[X - 2, Y + 2] == null)
+                    ret.Add(new int[] { X - 2, Y + 2 });
+                if (Y > 1 && Field[X - 1, Y - 1] != null && Field[X - 1, Y - 1]?.Player1 != Player1 && Field[X - 2, Y - 2] == null)
+                    ret.Add(new int[] { X - 2, Y - 2 });
+            }
+            // friendly move
+            if (!canTake && X < _field.Height - 1)
+            {
+                if (Y < Field.Width - 1 && Field[X + 1, Y + 1] == null)
+                    ret.Add(new int[] { X + 1, Y + 1 });
+                if (Y > 0 && Field[X + 1, Y - 1] == null)
+                    ret.Add(new int[] { X + 1, Y - 1 });
+            }
+            // take
+            if (X < _field.Height - 2)
+            {
+                if (Y < Field.Width - 2 && Field[X + 1, Y + 1] != null && Field[X + 1, Y + 1]?.Player1 != Player1 && Field[X + 2, Y + 2] == null)
+                    ret.Add(new int[] { X + 2, Y + 2 });
+                if (Y > 1 && Field[X + 1, Y - 1] != null && Field[X + 1, Y - 1]?.Player1 != Player1 && Field[X + 2, Y - 2] == null)
+                    ret.Add(new int[] { X + 2, Y - 2 });
+            }
+            return ret;
         }
     }
 

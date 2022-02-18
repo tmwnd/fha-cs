@@ -31,7 +31,7 @@ namespace cs_games.api
         {
             try
             {
-                // System.Diagnostics.Debug.WriteLine(qry);
+                // LogLn(qry);
                 MySqlDataReader reader = new MySqlCommand(qry, API.Connection).ExecuteReader();
 
                 List<string> header = new List<string>();
@@ -128,28 +128,37 @@ namespace cs_games.api
 
             Action<List<int>> hline = field_sizes =>
             {
-                System.Diagnostics.Debug.Write("+");
+                Log("+");
                 foreach (int size in field_sizes)
-                    System.Diagnostics.Debug.Write(new String('-', size + 2) + "+");
-                System.Diagnostics.Debug.WriteLine("");
+                    Log(new String('-', size + 2) + "+");
+                LogLine("");
             };
 
             hline(field_sizes);
             int field_index = 0;
-            System.Diagnostics.Debug.Write("| ");
+            Log("| ");
             foreach (string field in fields)
-                System.Diagnostics.Debug.Write(String.Format("{0,-" + field_sizes[field_index++] + "} | ", field));
-            System.Diagnostics.Debug.WriteLine("");
+                Log(String.Format("{0,-" + field_sizes[field_index++] + "} | ", field));
+            LogLine("");
             hline(field_sizes);
             for (int i = 0; i < json_array.GetArrayLength(); i++)
             {
                 field_index = 0;
-                System.Diagnostics.Debug.Write("| ");
+                Log("| ");
                 foreach (string field in fields)
-                    System.Diagnostics.Debug.Write(String.Format("{0,-" + field_sizes[field_index++] + "} | ", (json_array[i].TryGetProperty(field, out JsonElement tmp)) ? tmp.ToString() : "NULL"));
-                System.Diagnostics.Debug.WriteLine("");
+                    Log(String.Format("{0,-" + field_sizes[field_index++] + "} | ", (json_array[i].TryGetProperty(field, out JsonElement tmp)) ? tmp.ToString() : "NULL"));
+                LogLine("");
             }
             hline(field_sizes);
+        }
+
+        private static void LogLine(string s){
+            Log(s + "\n");
+        }
+
+        private static void Log(string s){
+            Console.Write(s);
+            System.Diagnostics.Debug.Write(s);
         }
     }
 }

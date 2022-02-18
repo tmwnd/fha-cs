@@ -63,11 +63,16 @@ namespace cs_games.chess
 
     internal class Rook : GameFigure<Chess>
     {
+        public override string IMG
+        {
+            get => base.IMG_DIR + "chess/rook_" + ((Player1) ? "1" : "2") + ".png";
+        }
+
         private bool _hasMoved;
         public bool HasMoved { get; set; }
         public Rook(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { HasMoved = false; }
 
-        public override void MoveTo(int x, int y)
+        public override bool MoveTo(int x, int y)
         {
             if (X == x ^ Y == y)
             {
@@ -87,6 +92,8 @@ namespace cs_games.chess
             }
             else
                 throw new IllegalMoveException("Der Turm kann sich nur gerade in einer Reihe bzw. Spalte bewegen.");
+
+            return false;
         }
 
         public override List<int[]> GetMoves()
@@ -127,9 +134,13 @@ namespace cs_games.chess
 
     internal class Knight : GameFigure<Chess>
     {
+        public override string IMG
+        {
+            get => base.IMG_DIR + "chess/knight_" + ((Player1) ? "1" : "2") + ".png";
+        }
         public Knight(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { }
 
-        public override void MoveTo(int x, int y)
+        public override bool MoveTo(int x, int y)
         {
             if ((Math.Abs(X - x) == 2 && Math.Abs(Y - y) == 1) || (Math.Abs(X - x) == 1 && Math.Abs(Y - y) == 2))
             {
@@ -143,6 +154,8 @@ namespace cs_games.chess
             }
             else
                 throw new IllegalMoveException("Der Springer kann sich nur 2 Schritte in eine Richtung und 1 Schritt zur Seite bewegen.");
+
+            return false;
         }
 
         public override List<int[]> GetMoves()
@@ -163,9 +176,14 @@ namespace cs_games.chess
 
     internal class Bishop : GameFigure<Chess>
     {
+        public override string IMG
+        {
+            get => base.IMG_DIR + "chess/bishop_" + ((Player1) ? "1" : "2") + ".png";
+        }
+
         public Bishop(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { }
 
-        public override void MoveTo(int x, int y)
+        public override bool MoveTo(int x, int y)
         {
             if (Math.Abs(X - x) == Math.Abs(Y - y))
             {
@@ -184,6 +202,8 @@ namespace cs_games.chess
             }
             else
                 throw new IllegalMoveException("Der Läufer kann sich nur diagonal bewegen.");
+
+            return false;
         }
 
         public override List<int[]> GetMoves()
@@ -224,9 +244,14 @@ namespace cs_games.chess
 
     internal class Queen : GameFigure<Chess>
     {
+        public override string IMG
+        {
+            get => base.IMG_DIR + "chess/queen_" + ((Player1) ? "1" : "2") + ".png";
+        }
+
         public Queen(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { }
 
-        public override void MoveTo(int x, int y)
+        public override bool MoveTo(int x, int y)
         {
             if (Math.Abs(X - x) == Math.Abs(Y - y) || (X == x ^ Y == y))
             {
@@ -245,6 +270,8 @@ namespace cs_games.chess
             }
             else
                 throw new IllegalMoveException("Der Läufer kann sich nur diagonal bewegen.");
+
+            return false;
         }
 
         public override List<int[]> GetMoves()
@@ -313,11 +340,16 @@ namespace cs_games.chess
 
     internal class Pawn : GameFigure<Chess>
     {
+        public override string IMG
+        {
+            get => base.IMG_DIR + "chess/pawn_" + ((Player1) ? "1" : "2") + ".png";
+        }
+
         private static GameField<Chess>? _lastField;
         private static GameField<Chess>? LastField { get; set; }
         public Pawn(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { }
 
-        public override void MoveTo(int x, int y)
+        public override bool MoveTo(int x, int y)
         {
             if (GetMoves().Contains(new int[] { x, y }))
             {
@@ -331,6 +363,8 @@ namespace cs_games.chess
                     Field[X, Y] = new Queen(Field, X, Y, Player1);
                 }
             }
+
+            return false;
         }
 
         public override char ToChar()
@@ -359,12 +393,17 @@ namespace cs_games.chess
 
     internal class King : GameFigure<Chess>
     {
+        public override string IMG
+        {
+            get => base.IMG_DIR + "chess/king_" + ((Player1) ? "1" : "2") + ".png";
+        }
+
         private bool _hasMoved;
         public bool HasMoved { get; set; }
 
         public King(GameField<Chess> field, int x, int y, bool player1) : base(field, y, x, player1) { HasMoved = false; }
 
-        public override void MoveTo(int x, int y)
+        public override bool MoveTo(int x, int y)
         {
             if (Math.Abs(X - x) <= 1 && Math.Abs(Y - y) <= 1)
             {
@@ -377,6 +416,8 @@ namespace cs_games.chess
                 Field[x, y] = this;
                 HasMoved = true;
             }
+
+            return false;
         }
 
         public override List<int[]> GetMoves()

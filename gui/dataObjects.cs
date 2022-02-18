@@ -7,15 +7,19 @@ namespace cs_games.data_objects
         public static GameField<G> _field = new GameField<G>();
         public static GameButton<G>[,] gameButtons = new GameButton<G>[0, 0];
         public static Label? _labelPlayerNow;
+        public static Label? _labelPointsPlayer1;
+        public static Label? _labelPointsPlayer2;
 
-        public static void Create(GameField<G> field, G game, Label labelPlayerNow)
+        public static void Create(GameField<G> field, G game, params Label[] labels)
         {
             Game.Player1 = true;
 
             _field = field;
             gameButtons = new GameButton<G>[field.Height, field.Width];
             _game = game;
-            _labelPlayerNow = labelPlayerNow;
+            _labelPlayerNow = labels[0];
+            _labelPointsPlayer1 = labels[1];
+            _labelPointsPlayer2 = labels[2];
         }
 
         public static void InitAll()
@@ -89,8 +93,8 @@ namespace cs_games.data_objects
             if (_field[X, Y]?.Player1 != Game.Player1)
                 return;
 
-            for (int i = 0; i < _field.Width; i++)
-                for (int j = 0; j < _field.Height; j++)
+            for (int i = 0; i < _field.Height; i++)
+                for (int j = 0; j < _field.Width; j++)
                     GameButton<G>.gameButtons[i, j].Enabled = false;
 
             foreach (int[] move in _field[X, Y]?.GetMoves() ?? new List<int[]>())
@@ -102,7 +106,11 @@ namespace cs_games.data_objects
                 if (button.X == X && button.Y == Y)
                 {
                     button.Click -= StartMoveClick;
+
                     button.PerformClick();
+
+                    foreach (int[] index in _field[X, Y]?.GetMoves() ?? new List<int[]>())
+                        gameButtons[index[0], index[1]].Enabled = true;
                 }
             }
         }
@@ -115,7 +123,21 @@ namespace cs_games.data_objects
                 return;
 
             GameButton<G> button = (GameButton<G>)sender;
-            _field[X, Y]?.MoveTo(button.X, button.Y);
+            bool take = _field[X, Y]?.MoveTo(button.X, button.Y) ?? false;
+
+            if (take)
+            {
+                if (Game.Player1)
+                {
+                    if (GameButton<G>._labelPointsPlayer1 != null)
+                        GameButton<G>._labelPointsPlayer1.Text = IntToPoints(PointsToInt(GameButton<G>._labelPointsPlayer1.Text) + 1);
+                }
+                else
+                {
+                    if (GameButton<G>._labelPointsPlayer2 != null)
+                        GameButton<G>._labelPointsPlayer2.Text = IntToPoints(PointsToInt(GameButton<G>._labelPointsPlayer2.Text) + 1);
+                }
+            }
 
             Game.Player1 = !Game.Player1;
 
@@ -126,13 +148,28 @@ namespace cs_games.data_objects
 
             if (_game?.CheckIfWin(out bool winner) ?? false)
             {
-                for (int i = 0; i < _field.Width; i++)
-                    for (int j = 0; j < _field.Height; j++)
+                for (int i = 0; i < _field.Height; i++)
+                    for (int j = 0; j < _field.Width; j++)
                         GameButton<G>.gameButtons[i, j].Enabled = false;
                 MessageBox.Show($" (/ ^_^)/ Spieler {((winner) ? Game.userList[0] : Game.userList[1])} hat gewonnen \\(^_^ \\)", "Gewonnen");
 
                 // TODO write into db
             }
+        }
+
+        private int PointsToInt(string points)
+        {
+            return int.Parse(points.Replace(".",""));
+        }
+
+        private string IntToPoints(int i)
+        {
+            string points = i.ToString();
+            string ret = "";
+            int counter = 0;
+            foreach (char c in points.Reverse())
+                ret = c + (((counter++ % 3 == 0) && (counter > 1)) ? "." : "") + ret;
+            return ret;
         }
     }
 }

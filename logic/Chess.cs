@@ -52,6 +52,7 @@
 
         public override bool CheckIfWin(out bool winner)
         {
+            Pawn.LastField = Field;
             if (king1?.GetMoves().Count == 0 && king1.IsAllowed(king1.X, king1.Y))
             {
                 winner = false;
@@ -314,7 +315,7 @@
     internal class Pawn : GameFigure<Chess>
     {
         private static GameField<Chess>? _lastField;
-        private static GameField<Chess>? LastField { get; set; }
+        public static GameField<Chess>? LastField { get; set; }
         public Pawn(GameField<Chess> field, int x, int y, bool player1) : base(field, x, y, player1) { }
 
         public override void MoveTo(int x, int y)

@@ -19,16 +19,6 @@ namespace cs_games
             InitializeComponent();
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void ButtonStartGameClick(object sender, EventArgs e)
         {
             FormGames games = new FormGames(this);
@@ -36,6 +26,8 @@ namespace cs_games
 
             if (_game == null)
                 return;
+
+            buttonNeu.Enabled = true;
 
             gameField.Controls.Clear();
 
@@ -49,19 +41,17 @@ namespace cs_games
             switch (_game.Name)
             {
                 case "Dame":
-                    GameButton<Dame>.Create(((Dame)_game).Field, (Dame)_game);
+                    GameButton<Dame>.Create(((Dame)_game).Field, (Dame)_game, labelPlayerNow);
                     break;
                 case "Chess":
-                    GameButton<Chess>.Create(((Chess)_game).Field, (Chess)_game);
+                    GameButton<Chess>.Create(((Chess)_game).Field, (Chess)_game, labelPlayerNow);
                     break;
                 case "TicTacToe":
-                    GameButton<TicTacToe>.Create(((TicTacToe)_game).Field, (TicTacToe)_game);
+                    GameButton<TicTacToe>.Create(((TicTacToe)_game).Field, (TicTacToe)_game, labelPlayerNow);
                     break;
                 case "VierGewinnt":
-                    GameButton<VierGewinnt>.Create(((VierGewinnt)_game).Field, (VierGewinnt)_game);
+                    GameButton<VierGewinnt>.Create(((VierGewinnt)_game).Field, (VierGewinnt)_game, labelPlayerNow);
                     break;
-                default:
-                    throw new Exception($"Spiel {_game.Name} wurde noch nicht implementert; Gerne auf https://github.com/tmwnd/fha-cs anfragen");
             }
 
             for (int i = 0; i < _game.Height; i++)
@@ -94,11 +84,39 @@ namespace cs_games
                     gameField.Controls.Add(dynamicButton);
                 }
             }
+
+            labelPlayerNow.Text = "Aktuell " + Game.userList[0];
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void NeuClick(object sender, EventArgs e)
         {
+            if (_game == null)
+                return;
 
+            _game.Init();
+            switch (_game.Name)
+            {
+                case "Dame":
+                    GameButton<Dame>.InitAll();
+                    break;
+                case "Chess":
+                    GameButton<Chess>.InitAll();
+                    break;
+                case "TicTacToe":
+                    GameButton<TicTacToe>.InitAll();
+                    break;
+                case "VierGewinnt":
+                    GameButton<VierGewinnt>.InitAll();
+                    break;
+            }
+
+            labelPlayerNow.Text = "Aktuell: " + Game.userList[0];
+        }
+
+        private void FormGame_Load(object sender, EventArgs e)
+        {
+            spieler1.Text = Game.userList[0];
+            spieler2.Text = Game.userList[1];
         }
     }
 }

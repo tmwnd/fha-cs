@@ -9,6 +9,23 @@ namespace cs_games.dame
         }
 
         public override string Name { get => "Dame"; }
+
+        public static List<Skin<Dame>> skins = new List<Skin<Dame>> { new DameCSBlockkursSkin(), new DameChineseSkin(), new DameChineseColoredSkin() };
+        public static int skinIndex = 0;
+        public override List<string> SkinNames
+        {
+            get
+            {
+                List<string> ret = new List<string>();
+                foreach (Skin<Dame> skin in skins)
+                    ret.Add(skin.Name);
+                return ret;
+            }
+        }
+        public override int SkinIndex { 
+            set => Dame.skinIndex = value;
+        }
+
         public override int Width { get => _field.Width; }
         public override int Height { get => _field.Height; }
 
@@ -21,6 +38,9 @@ namespace cs_games.dame
 
         public override void Init()
         {
+            for (int i = 0; i < Height; i++)
+                for (int j = 0; j < Width; j++)
+                    _field[i, j] = null;
             foreach (int i in new int[] { 0, 1, 2, 5, 6, 7 })
                 for (int j = 0; j < 8; j += 2)
                     new DameFigure(_field, i, j + ((i % 2 == 1) ? 1 : 0), i > 2);
@@ -40,10 +60,9 @@ namespace cs_games.dame
 
     public class DameFigure : GameFigure<Dame>
     {
-        private Skin<Dame> skin = new DameCSBlockkursSkin();
         public override string IMG
         {
-            get => skin.getIMG(_player1, this);
+            get => Dame.skins[Dame.skinIndex].getIMG(_player1, this);
         }
 
         public override string Name
@@ -55,8 +74,17 @@ namespace cs_games.dame
 
         public override bool CanMove()
         {
-            if (CanTake())
-                return true;
+            if (Game.Player1 != Player1) // not your turn
+                return false;
+
+            bool canTake = CanTake();
+            for (int i = 0; i < Field.Height && !canTake; i++)
+                for (int j = 0; j < Field.Width && !canTake; j++)
+                    canTake = canTake || ((((DameFigure?)Field[i, j])?.CanTake() ?? false) && Field[i, j]?.Player1 == Player1);
+
+            if (canTake) // some stone can take
+                return canTake == CanTake();
+
             if (Player1)
             {
                 // unten
@@ -72,7 +100,7 @@ namespace cs_games.dame
             return false;
         }
 
-        private bool CanTake()
+        public bool CanTake()
         {
             if (Player1)
             {
@@ -102,8 +130,11 @@ namespace cs_games.dame
         public override List<int[]> GetMoves()
         {
             List<int[]> ret = new List<int[]>();
-            // TODO (Player1) ? -1 : 1
-            bool canTake = CanTake();
+
+            bool canTake = false;
+            for (int i = 0; i < Field.Height && !canTake; i++)
+                for (int j = 0; j < Field.Width && !canTake; j++)
+                    canTake = canTake || ((((DameFigure?)Field[i, j])?.CanTake() ?? false) && Field[i, j]?.Player1 == Player1);
             if (Player1)
             {
                 // friendly move
@@ -147,12 +178,19 @@ namespace cs_games.dame
 
         public override void MoveTo(int x, int y)
         {
+            bool cont = false;
             if (Math.Abs(X - x) == 2 && Math.Abs(Y - y) == 2)
+            {
                 _field[(X + x) / 2, (Y + y) / 2] = null;
+                cont = true;
+            }
 
             _field.Swap(X, Y, x, y);
             X = x;
             Y = y;
+
+            if (cont && CanTake())
+                Game.Player1 = !Game.Player1;
         }
 
         public override char ToChar()
@@ -163,6 +201,8 @@ namespace cs_games.dame
 
     public class DameChineseSkin : Skin<Dame>
     {
+        public override string Name { get => "DameChineseSkin"; }
+
         public override string getIMG(bool player1, GameFigure<Dame> figure)
         {
             return base.getIMG(player1, figure) + "dame/chinese_" + ((player1) ? "1" : "2") + ".png";
@@ -171,6 +211,8 @@ namespace cs_games.dame
 
     public class DameChineseColoredSkin : Skin<Dame>
     {
+        public override string Name { get => "DameChineseColoredSkin"; }
+
         public override string getIMG(bool player1, GameFigure<Dame> figure)
         {
             return base.getIMG(player1, figure) + "dame/chinese_colored_" + ((player1) ? "1" : "2") + ".png";
@@ -179,6 +221,8 @@ namespace cs_games.dame
 
     public class DameCSBlockkursSkin : Skin<Dame>
     {
+        public override string Name { get => "DameCSBlockkursSkin"; }
+
         public override string getIMG(bool player1, GameFigure<Dame> figure)
         {
             return base.getIMG(player1, figure) + "dame/cs_blockkurs_" + ((player1) ? "1" : "2") + ".png";

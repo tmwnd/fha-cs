@@ -58,7 +58,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(324, 429);
+            this.ClientSize = new System.Drawing.Size(431, 524);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBoxGames);
             this.Margin = new System.Windows.Forms.Padding(6);

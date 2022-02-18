@@ -16,4 +16,26 @@ using cs_games.chess;
 // ttt.CheckIfWin(out bool winner);
 // Console.WriteLine(ttt);
 
-new Chess();
+//Chess c = new Chess();
+//c.Init();
+
+//Console.WriteLine(c.ToString());
+
+//foreach(int[] move in c.Field[0, 0]?.GetMoves())
+//    Console.WriteLine(String.Join(',',move));
+//Console.WriteLine("Rook");
+//foreach (int[] move in c.Field[0, 1]?.GetMoves())
+//    Console.WriteLine(String.Join(',', move));
+//Console.WriteLine("Knight");
+//foreach (int[] move in c.Field[0, 2]?.GetMoves())
+//    Console.WriteLine(String.Join(',', move));
+//Console.WriteLine("Bishop");
+//foreach (int[] move in c.Field[0, 3]?.GetMoves())
+//    Console.WriteLine(String.Join(',', move));
+//Console.WriteLine("Queen");
+//foreach (int[] move in c.Field[0, 4]?.GetMoves())
+//    Console.WriteLine(String.Join(',', move)); 
+//Console.WriteLine("King");
+//foreach (int[] move in c.Field[1, 0]?.GetMoves())
+//    Console.WriteLine(String.Join(',', move));
+//Console.WriteLine("Pawn");

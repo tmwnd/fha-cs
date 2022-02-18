@@ -2,16 +2,6 @@ namespace cs_games.tic_tac_toe
 {
     public class TicTacToe : Game
     {
-        private static bool player1 = false;
-        public static bool Player1
-        {
-            get
-            {
-                player1 = !player1;
-                return player1;
-            }
-        }
-
         private GameField<TicTacToe> _field;
         public GameField<TicTacToe> Field
         {
@@ -19,6 +9,25 @@ namespace cs_games.tic_tac_toe
         }
 
         public override string Name { get => "TicTacToe"; }
+
+        public static List<Skin<TicTacToe>> skins = new List<Skin<TicTacToe>> { new TicTacToeDefaultSkin(), new TicTacToePaintSkin() };
+        public static int skinIndex = 0;
+
+        public override List<string> SkinNames
+        {
+            get
+            {
+                List<string> ret = new List<string>();
+                foreach (Skin<TicTacToe> skin in skins)
+                    ret.Add(skin.Name);
+                return ret;
+            }
+        }
+        public override int SkinIndex
+        {
+            set => TicTacToe.skinIndex = value;
+        }
+        
         public override int Width { get => _field.Width; }
         public override int Height { get => _field.Height; }
 
@@ -36,7 +45,10 @@ namespace cs_games.tic_tac_toe
         {
             for (int i = 0; i < Height; i++)
                 for (int j = 0; j < Width; j++)
+                {
+                    Field[i, j] = null;
                     new UnusedTicTacToeFigure(_field, i, j, false);
+                }
         }
 
         public override bool CheckIfWin(out bool winner)
@@ -76,9 +88,9 @@ namespace cs_games.tic_tac_toe
             get => null;
         }
 
-        public override string Name
+        public override bool Player1
         {
-            get => "Unused";
+            get => Game.Player1;
         }
 
         public override bool CanMove() { return true; }
@@ -95,12 +107,17 @@ namespace cs_games.tic_tac_toe
     {
         public override string? IMG
         {
-            get => Game.config.GetProperty("root_path").ToString() + Game.config.GetProperty("skins").ToString() + "tictactoe/paint_" + ((Player1) ? "1" : "2") + ".png";
+            get => TicTacToe.skins[TicTacToe.skinIndex].getIMG(Player1, this);
         }
 
         public override string Name
         {
             get => (Player1) ? "Kreuz" : "Kreis";
+        }
+
+        public override bool Player1
+        {
+            get => base.Player1;
         }
 
         public TicTacToeFigure(GameField<TicTacToe> field, int x, int y, bool player1) : base(field, x, y, player1) { }
@@ -112,13 +129,32 @@ namespace cs_games.tic_tac_toe
         public override void MoveTo(int x, int y)
         {
             _field[x, y] = null; // clear field
-            new TicTacToeFigure(Field, X, Y, TicTacToe.Player1); // error without clear
-
+            new TicTacToeFigure(Field, X, Y, Game.Player1); // error without clear
         }
 
         public override char ToChar()
         {
             return (_player1) ? 'x' : 'o';
+        }
+    }
+
+    public class TicTacToeDefaultSkin : Skin<TicTacToe>
+    {
+        public override string Name { get => "TicTacToeDefaultSkin"; }
+
+        public override string getIMG(bool player1, GameFigure<TicTacToe> figure)
+        {
+            return base.getIMG(player1, figure) + "tictactoe/default_" + ((player1) ? "1" : "2") + ".png";
+        }
+    }
+
+    public class TicTacToePaintSkin : Skin<TicTacToe>
+    {
+        public override string Name { get => "TicTacToePaintSkin"; }
+
+        public override string getIMG(bool player1, GameFigure<TicTacToe> figure)
+        {
+            return base.getIMG(player1, figure) + "tictactoe/paint_" + ((player1) ? "1" : "2") + ".png";
         }
     }
 }

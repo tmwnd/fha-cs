@@ -6,12 +6,16 @@ namespace cs_games.data_objects
         public static G? _game;
         public static GameField<G> _field = new GameField<G>();
         public static GameButton<G>[,] gameButtons = new GameButton<G>[0, 0];
+        public static Label? _labelPlayerNow;
 
-        public static void Create(GameField<G> field, G game)
+        public static void Create(GameField<G> field, G game, Label labelPlayerNow)
         {
+            Game.Player1 = true;
+
             _field = field;
             gameButtons = new GameButton<G>[field.Height, field.Width];
             _game = game;
+            _labelPlayerNow = labelPlayerNow;
         }
 
         public static void InitAll()
@@ -20,6 +24,7 @@ namespace cs_games.data_objects
                 for (int j = 0; j < GameButton<G>.gameButtons.GetLength(1); j++)
                 {
                     GameButton<G> button = GameButton<G>.gameButtons[i, j];
+                    System.Diagnostics.Debug.WriteLine(button.Location);
                     button.Init();
                 }
         }
@@ -53,13 +58,13 @@ namespace cs_games.data_objects
 
             if (_field[X, Y] != null)
             {
-                System.Diagnostics.Debug.WriteLine(X);
-                System.Diagnostics.Debug.WriteLine(Y);
                 if (_field[X, Y]?.CanMove() ?? false)
                 {
                     Enabled = true;
                     Click += StartMoveClick;
                 }
+                else
+                    Enabled = false;
 
                 if (_field[X, Y]?.IMG != null)
                 {
@@ -67,9 +72,8 @@ namespace cs_games.data_objects
                     BackgroundImageLayout = ImageLayout.Stretch;
                 }
                 else
-                {
                     BackgroundImage = null;
-                }
+
             }
             else
             {
@@ -81,6 +85,8 @@ namespace cs_games.data_objects
         public void StartMoveClick(Object? sender, EventArgs e)
         {
             if (_field[X, Y] == null)
+                return;
+            if (_field[X, Y]?.Player1 != Game.Player1)
                 return;
 
             for (int i = 0; i < _field.Width; i++)
@@ -105,17 +111,27 @@ namespace cs_games.data_objects
         {
             if (sender == null)
                 return;
+            if (_field[X, Y]?.Player1 != Game.Player1)
+                return;
 
             GameButton<G> button = (GameButton<G>)sender;
             _field[X, Y]?.MoveTo(button.X, button.Y);
 
+            Game.Player1 = !Game.Player1;
+
+            if (GameButton<G>._labelPlayerNow != null)
+                GameButton<G>._labelPlayerNow.Text = "Aktuell: " + Game.userList[((Game.Player1) ? 0 : 1)];
+
             GameButton<G>.InitAll();
 
-            if (_game?.CheckIfWin(out bool winner) ?? false) {
-                System.Diagnostics.Debug.WriteLine($"Spieler {((winner) ? "1": "2")} hat gewonnen");
+            if (_game?.CheckIfWin(out bool winner) ?? false)
+            {
                 for (int i = 0; i < _field.Width; i++)
                     for (int j = 0; j < _field.Height; j++)
                         GameButton<G>.gameButtons[i, j].Enabled = false;
+                MessageBox.Show($" (/ ^_^)/ Spieler {((winner) ? Game.userList[0] : Game.userList[1])} hat gewonnen \\(^_^ \\)", "Gewonnen");
+
+                // TODO write into db
             }
         }
     }

@@ -3,5 +3,9 @@
         "folder": "media/games/",
         "default": "default.png"
     },
-    "skins": "media/"
+    "skins": "media/",
+    "database": {
+        "username": "fha_cs",
+        "password": "F2j77*D%@4H5e$P3WuX^JX#27$k9aeAr"
+    }
 }

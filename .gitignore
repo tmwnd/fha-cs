@@ -13,3 +13,7 @@ gui/.vs/
 gui/bin/
 gui/obj/
 gui/*.user
+
+# api
+api/bin/
+api/obj/
